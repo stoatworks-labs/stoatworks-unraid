@@ -13,9 +13,11 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/stoatworks-labs/pmse-to-wwb/issues</Support>
   <Project>https://github.com/stoatworks-labs/pmse-to-wwb</Project>
-  <Overview>Converts PMSE frequency assignments into Shure Wireless Workbench format. Conversion happens in the browser.</Overview>
+  <Overview>Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.
+
+Note: This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces — nothing generates a Python image, and nothing needs to.</Overview>
   <Category>Tools:Utilities:</Category>
-  <WebUI>http://[IP]:[PORT:80]/</WebUI>
+  <WebUI>http://[IP]:[PORT:8000]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/pmse-to-wwb.xml</TemplateURL>
   <Icon></Icon>
   <ExtraParams/>
@@ -25,5 +27,5 @@
   <DonateText/>
   <DonateLink/>
   <Requires/>
-  <Config Name="WebUI Port" Target="80" Default="8507" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false">8507</Config>
+  <Config Name="WebUI Port" Target="8000" Default="8507" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false">8507</Config>
 </Container>

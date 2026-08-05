@@ -468,6 +468,14 @@ ${matrix}
           tags: |
             ${REGISTRY}/\${{ matrix.image }}:latest
             ${REGISTRY}/\${{ matrix.image }}:\${{ github.sha }}
+          # Links the GHCR package to this repo. Where the image name already
+          # matches the repo name GitHub infers this and the package inherits
+          # the repo's public visibility; where it does not — the website
+          # publishes stoatworks-website from stoatworks-labs.github.io — the
+          # package is left unlinked and stays PRIVATE, so an anonymous
+          # docker pull gets a 403 while every other image in the fleet works.
+          labels: |
+            org.opencontainers.image.source=\${{ github.server_url }}/\${{ github.repository }}
           cache-from: type=gha,scope=\${{ matrix.image }}
           cache-to: type=gha,mode=max,scope=\${{ matrix.image }}
 `;

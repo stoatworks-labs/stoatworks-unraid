@@ -19,7 +19,7 @@ Note: The CSP in public/_headers allows microphone capture from 'self' only. Ser
   <Category>MediaApp:Music:</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/simple-rta.xml</TemplateURL>
-  <Icon></Icon>
+  <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>Stoatworks Labs builds open tooling for live AV: video routing and switcher control, audio measurement and loudness, lighting and LED design, RF coordination, and Resolume/OpenFX plugins. This repository holds the Unraid templates for the ones that make sense on a server — the always-on services (ATEM fleet monitoring, SRT routing, device discovery, CasparCG show control, RF coordination) alongside the browser-based calculators and design tools, which run entirely in the browser and are worth self-hosting so they work in a venue with no internet. Images are built by GitHub Actions and published to GHCR. Anything that discovers devices over mDNS or broadcast ships with host networking, because Docker's bridge network silently finds nothing. Support is via GitHub issues on each project.</Profile>
+  <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
+  <WebPage>https://github.com/stoatworks-labs/stoatworks-unraid</WebPage>
+  <Forum>https://github.com/stoatworks-labs/stoatworks-unraid/issues</Forum>
+</CommunityApplications>

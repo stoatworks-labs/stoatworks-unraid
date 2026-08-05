@@ -17,7 +17,7 @@
   <Category>Tools:Utilities:</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/aspect-calc.xml</TemplateURL>
-  <Icon></Icon>
+  <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>

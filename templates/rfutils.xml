@@ -21,7 +21,7 @@ This container uses host networking because it discovers devices over mDNS/broad
   <Category>Tools:Utilities:</Category>
   <WebUI>http://[IP]:8420/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/rfutils.xml</TemplateURL>
-  <Icon></Icon>
+  <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>

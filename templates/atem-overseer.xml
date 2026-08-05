@@ -19,7 +19,7 @@ Note: packages/server/src/discovery.ts uses multicast-dns. Bridge networking sil
   <Category>MediaApp:Video Tools:</Category>
   <WebUI>http://[IP]:4700/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/atem-overseer.xml</TemplateURL>
-  <Icon></Icon>
+  <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>

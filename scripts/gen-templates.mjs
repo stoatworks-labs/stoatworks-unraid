@@ -108,7 +108,15 @@ function template(entry, meta) {
   const iconRel = 'docs/icon.png';
   const hasIcon =
     !!entry.checkoutDir && !isPrivate && existsSync(join(PROJECTS, entry.checkoutDir, iconRel));
-  const icon = hasIcon ? `${unraid.iconBase}/${repo}/main/${iconRel}` : '';
+  // Falling back to the Stoatworks mark rather than leaving this empty: CA's own
+  // placeholder for a missing icon is a broken-image box, which reads as a
+  // broken template rather than an app without artwork. The mark is served from
+  // THIS repo, which is public — the website's copy is not usable here, because
+  // stoatworks-labs.github.io is private and raw.githubusercontent 404s
+  // anonymously for a private repo no matter how right the path is.
+  const icon = hasIcon
+    ? `${unraid.iconBase}/${repo}/main/${iconRel}`
+    : unraid.profile.icon;
 
   const overview = [
     entry.desc,
@@ -259,6 +267,24 @@ for (const entry of imageEntries()) {
   writeFileSync(join(ROOT, dir, `${entry.image}.xml`), template(entry, meta));
   summary[meta.visibility === 'private' ? 'private' : 'public'].push(entry.image);
 }
+
+// Community Applications will not accept a template repository without this
+// file at the repo ROOT — the submission is rejected with "No ca_profile.xml
+// found. Add a ca_profile.xml (repo root) with a non-empty <Profile> section."
+// It describes the REPOSITORY, not any one app: the root element is
+// <CommunityApplications> and <Profile> is prose, not a container of fields.
+// It belongs here rather than in an app repo, because this is the repo CA is
+// pointed at; the app repos only hold Dockerfiles and CA never reads them.
+const caProfile = `<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>${xmlEscape(unraid.profile.text)}</Profile>
+  <Icon>${xmlEscape(unraid.profile.icon)}</Icon>
+  <WebPage>${xmlEscape(unraid.profile.webPage)}</WebPage>
+  <Forum>${xmlEscape(unraid.profile.forum)}</Forum>
+</CommunityApplications>
+`;
+writeFileSync(join(ROOT, 'ca_profile.xml'), caProfile);
+console.log('ca_profile.xml      written');
 
 console.log(`templates/          ${summary.public.length} public`);
 for (const s of summary.public) console.log('  ' + s);

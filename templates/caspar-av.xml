@@ -27,7 +27,7 @@ Note: Two things a Rust-only Dockerfile gets wrong here. `web/` is NOT tracked i
   <DonateText/>
   <DonateLink/>
   <Requires/>
-  <Config Name="WebUI Port" Target="8080" Default="8080" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+  <Config Name="WebUI Port" Target="8080" Default="8092" Mode="tcp" Description="Host port for the web interface." Type="Port" Display="always" Required="true" Mask="false">8092</Config>
   <Config Name="Config" Target="/app/config" Default="/mnt/user/appdata/caspar-av/config" Mode="rw" Description="Configuration files." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/caspar-av/config</Config>
   <Config Name="Data" Target="/app/data" Default="/mnt/user/appdata/caspar-av/data" Mode="rw" Description="Persistent application data." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/caspar-av/data</Config>
 </Container>

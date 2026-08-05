@@ -113,7 +113,11 @@ function template(entry, meta) {
   const overview = [
     entry.desc,
     entry.note ? `\n\nNote: ${entry.note}` : '',
-    entry.hostNetwork
+    // Only the apps whose own note does not already explain bridge mode get the
+    // generic paragraph. Where a note spells out which module does the
+    // discovering, appending this as well says the same thing twice in one
+    // Overview box.
+    entry.hostNetwork && !/bridge/i.test(entry.note ?? '')
       ? `\n\nThis container uses host networking because it discovers devices over mDNS/broadcast, which Docker's bridge network does not reliably forward. In bridge mode discovery finds nothing rather than reporting an error.`
       : '',
     isPrivate

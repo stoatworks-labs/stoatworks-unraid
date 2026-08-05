@@ -19,7 +19,7 @@ Note: Built with default features. NDI is included but loads its runtime with dl
 
 This container uses host networking because it discovers devices over mDNS/broadcast, which Docker's bridge network does not reliably forward. In bridge mode discovery finds nothing rather than reporting an error.</Overview>
   <Category>MediaApp:Video Tools:</Category>
-  <WebUI>http://[IP]:8080/</WebUI>
+  <WebUI>http://[IP]:8091/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/srt-router.xml</TemplateURL>
   <Icon></Icon>
   <ExtraParams/>

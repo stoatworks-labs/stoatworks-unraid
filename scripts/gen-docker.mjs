@@ -259,7 +259,7 @@ ${webCopy}
 EXPOSE ${app.port}${(app.extraPorts || []).map((p) => `\nEXPOSE ${p.port}${p.proto === 'udp' ? '/udp' : ''}`).join('')}
 ${app.dataPath ? `VOLUME ["${app.dataPath}"]\n` : ''}${seed}
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \\
-    CMD curl -fsS http://localhost:${app.port}/ >/dev/null || exit 1
+    CMD curl -fsS http://localhost:${app.seedConfig?.bindPortLine ? '\${WEB_PORT:-' + app.port + '}' : app.port}/ >/dev/null || exit 1
 
 ${cmd}
 `;
@@ -288,7 +288,18 @@ if [ -d /app/config-default ] && [ -z "$(ls -A ${app.configPath} 2>/dev/null)" ]
     if [ -f ${app.configPath}/${app.seedConfig.defaultFile} ] && \\
        [ ! -f ${app.configPath}/${app.seedConfig.as} ]; then
         mv ${app.configPath}/${app.seedConfig.defaultFile} ${app.configPath}/${app.seedConfig.as}
-    fi
+    fi${app.seedConfig.bindPortLine ? `
+
+    # Move the web UI off the port the repo's example config uses. This app runs
+    # on host networking, where Unraid's port field does nothing and the process
+    # binds the host directly — so sharing a default with another host-networked
+    # container means whichever starts second dies with EADDRINUSE. flock is
+    # already on ${app.seedConfig.bindPortLine.clash}, and was there first.
+    #
+    # Seed time only: this rewrites the file once, when it is first created. Edit
+    # the port in the config afterwards and it stays edited.
+    sed -i 's|^bind = "0.0.0.0:${app.seedConfig.bindPortLine.from}"|bind = "0.0.0.0:'"\${WEB_PORT:-${app.port}}"'"|' \\
+        ${app.configPath}/${app.seedConfig.as}` : ''}
 fi
 
 exec "$@"

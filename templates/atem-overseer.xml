@@ -15,9 +15,7 @@
   <Project>https://github.com/stoatworks-labs/atem-overseer</Project>
   <Overview>Fleet dashboard for Blackmagic ATEM switchers — status, health and restreaming across every switcher on the network.
 
-Note: packages/server/src/discovery.ts uses multicast-dns. Bridge networking silently discovers nothing, so the template ships host networking. Devices can still be added by IP in bridge mode if you prefer isolation.
-
-This container uses host networking because it discovers devices over mDNS/broadcast, which Docker's bridge network does not reliably forward. In bridge mode discovery finds nothing rather than reporting an error.</Overview>
+Note: packages/server/src/discovery.ts uses multicast-dns. Bridge networking silently discovers nothing, so the template ships host networking. Devices can still be added by IP in bridge mode if you prefer isolation.</Overview>
   <Category>MediaApp:Video Tools:</Category>
   <WebUI>http://[IP]:4700/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/atem-overseer.xml</TemplateURL>

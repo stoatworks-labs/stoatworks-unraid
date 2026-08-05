@@ -1,0 +1,83 @@
+{
+  "$comment": [
+    "Template-side facts, kept separate from fleet.json so the build description",
+    "of an app and its packaging on Unraid can change independently.",
+    "",
+    "visibility — checked with `gh repo view` on 2026-08-05, not assumed. The",
+    "  eight browser tools were published on 2026-08-05, so nothing in the fleet",
+    "  is private any more; the machinery below is kept because it is the reason",
+    "  the generated output looks the way it does, and because a future app may",
+    "  well start private again.",
+    "  It decides three things that all fail quietly if got wrong:",
+    "",
+    "  1. GHCR packages inherit their repo's visibility on first publish. A",
+    "     template in a public Community Applications store pointing at a private",
+    "     package gives every user who clicks Install a manifest-unknown or",
+    "     denied error, which reads like a broken template rather than a",
+    "     permissions one. Private apps therefore go to templates-private/ and",
+    "     are installed on your own server via Add Container, not via CA.",
+    "",
+    "  2. GitHub Actions minutes are only consumed by private repositories.",
+    "     Public repos build for free, so they carry a pull_request trigger; a",
+    "     private one would be push-only on main, building an image once per",
+    "     landed change rather than on every PR push. No repo bills today.",
+    "",
+    "  3. raw.githubusercontent.com 404s for private repos, so an icon URL",
+    "     pointing there renders as a broken image in CA. Private templates get",
+    "     no icon rather than a dead link.",
+    "",
+    "hostPort — the default host port the template offers. Assigned so that a",
+    "  server running several of these at once has no collisions out of the box.",
+    "  Static sites take 8500+; services keep the port they natively listen on,",
+    "  because their config files, companion modules and documentation all name",
+    "  it and a template that quietly remapped it would contradict them.",
+    "",
+    "  Apps on host networking have no hostPort: the container binds the host's",
+    "  port directly and the template cannot remap it."
+  ],
+
+  "iconBase": "https://raw.githubusercontent.com/stoatworks-labs",
+  "supportBase": "https://github.com/stoatworks-labs",
+
+  "apps": {
+    "nesolume-demo":         { "repo": "nesolume",            "visibility": "public",  "hostPort": 8500 },
+    "asciify-demo":          { "repo": "asciify",             "visibility": "public",  "hostPort": 8501 },
+    "downpour-demo":         { "repo": "downpour",            "visibility": "public",  "hostPort": 8502 },
+    "old-cathode-demo":      { "repo": "old-cathode",         "visibility": "public",  "hostPort": 8503 },
+    "porthole-demo":         { "repo": "porthole",            "visibility": "public",  "hostPort": 8504 },
+    "luma-keyer-demo":       { "repo": "resolume-luma-keyer", "visibility": "public",  "hostPort": 8505 },
+    "resolume-scopes-demo":  { "repo": "resolume-scopes",     "visibility": "public",  "hostPort": 8506 },
+    "pmse-to-wwb":           { "repo": "pmse-to-wwb",         "visibility": "public",  "hostPort": 8507 },
+    "zero-eq-sim":           { "repo": "zero-eq",             "visibility": "public",  "hostPort": 8508 },
+    "contourtonist-demo":    { "repo": "contourtonist",       "visibility": "public",  "hostPort": 8509 },
+    "outrun-demo":           { "repo": "outrun",              "visibility": "public",  "hostPort": 8510 },
+    "atem-scopes":           { "repo": "atem-scopes",         "visibility": "public",  "hostPort": 8511 },
+    "srt-router-demo":       { "repo": "srt-router",          "visibility": "public",  "hostPort": 8512 },
+
+    "aspect-calc":           { "repo": "aspect-calc",         "visibility": "public",  "hostPort": 8520 },
+    "blend-calc":            { "repo": "blend-calc",          "visibility": "public",  "hostPort": 8521 },
+    "test-card":             { "repo": "test-card",           "visibility": "public",  "hostPort": 8522 },
+    "arraycad":              { "repo": "arraycad",            "visibility": "public",  "hostPort": 8523 },
+    "stagewash":             { "repo": "stagewash",           "visibility": "public",  "hostPort": 8524 },
+    "simple-rta":            { "repo": "simpleRTA",           "visibility": "public",  "hostPort": 8525 },
+    "pixel-peeker":          { "repo": "pixel-peeker",        "visibility": "public",  "hostPort": 8526 },
+    "pixel-peeker-lite":     { "repo": "pixel-peeker",        "visibility": "public",  "hostPort": 8527 },
+    "thumbnail-generator":   { "repo": "thumbnail-generator", "visibility": "public",  "hostPort": 8528 },
+
+    "stoatworks-website":    { "repo": "stoatworks-labs.github.io", "visibility": "public", "hostPort": 8530 },
+    "stoatworks-hire":       { "repo": null, "visibility": "none", "hostPort": 8531 },
+    "stoatworks-productions":{ "repo": null, "visibility": "none", "hostPort": 8532 },
+
+    "atem-overseer":         { "repo": "atem-overseer",       "visibility": "public",  "hostPort": null },
+    "rfutils":               { "repo": "RFutils",             "visibility": "public",  "hostPort": null },
+    "srt-router":            { "repo": "srt-router",          "visibility": "public",  "hostPort": null },
+    "flock":                 { "repo": "flock",               "visibility": "public",  "hostPort": null },
+    "caspar-av":             { "repo": "caspar-av",           "visibility": "public",  "hostPort": 8080 }
+  },
+
+  "$notes": {
+    "stoatworks-website": "The working directory is `stoatworks-website` but the GitHub repo is `stoatworks-labs.github.io`. A support/icon URL built from the directory name silently 404s.",
+    "stoatworks-hire": "Not a git repository on this machine — no remote, so no CI and no published image. It gets a Dockerfile and compose file that build locally, and no CA template, because a template with nothing to pull is worse than no template.",
+    "stoatworks-productions": "Same as stoatworks-hire."
+  }
+}

@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>flock</Name>
   <Repository>ghcr.io/stoatworks-labs/flock:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/flock</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>

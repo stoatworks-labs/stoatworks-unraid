@@ -35,7 +35,7 @@
       "port": 8000,
       "hostNetwork": false,
       "title": "PMSE to WWB",
-      "category": "Tools:Utilities:",
+      "category": "Tools:Utilities",
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
       "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces — nothing generates a Python image, and nothing needs to."
@@ -49,7 +49,7 @@
       "headers": "public/_headers",
       "notFound": "none",
       "title": "Aspect Calc",
-      "category": "Tools:Utilities:",
+      "category": "Tools:Utilities",
       "desc": "Aspect ratio, pixel pitch and screen geometry calculator. Runs entirely in the browser."
     },
     {
@@ -61,7 +61,7 @@
       "headers": "public/_headers",
       "notFound": "none",
       "title": "Blend Calc",
-      "category": "Tools:Utilities:",
+      "category": "Tools:Utilities",
       "desc": "Projector edge-blend calculator with Resolume export. Runs entirely in the browser."
     },
     {
@@ -97,7 +97,7 @@
       "headers": "public/_headers",
       "notFound": "none",
       "title": "ArrayCAD",
-      "category": "MediaApp:Music:",
+      "category": "MediaApp:Music",
       "desc": "Converts CAD drawings to d&b ArrayCalc and Soundvision venue data. Runs entirely in the browser."
     },
     {
@@ -109,7 +109,7 @@
       "headers": "public/_headers",
       "notFound": "spa",
       "title": "Stagewash",
-      "category": "Tools:Utilities:",
+      "category": "Tools:Utilities",
       "desc": "Stage lighting coverage calculator. Project data never leaves the browser."
     },
     {
@@ -121,7 +121,7 @@
       "headers": "public/_headers",
       "notFound": "spa",
       "title": "simpleRTA",
-      "category": "MediaApp:Music:",
+      "category": "MediaApp:Music",
       "desc": "Real-time analyser, spectrograph and meter. Audio is captured and analysed in the page and never leaves the browser.",
       "note": "The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP — getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN."
     },
@@ -196,7 +196,7 @@
       "hostNetwork": true,
       "configPath": "/app/config",
       "title": "RFutils",
-      "category": "Tools:Utilities:",
+      "category": "Tools:Utilities",
       "desc": "RF coordination toolkit — scanning, frequency planning and wireless monitoring in one server.",
       "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
     },

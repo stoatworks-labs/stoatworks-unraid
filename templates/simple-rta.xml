@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>simple-rta</Name>
   <Repository>ghcr.io/stoatworks-labs/simple-rta:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/simple-rta</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -16,7 +16,7 @@
   <Overview>Real-time analyser, spectrograph and meter. Audio is captured and analysed in the page and never leaves the browser.
 
 Note: The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP — getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN.</Overview>
-  <Category>MediaApp:Music:</Category>
+  <Category>MediaApp:Music</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/simple-rta.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>

@@ -217,7 +217,7 @@ function template(entry, meta) {
 <Container version="2">
   <Name>${xmlEscape(entry.image)}</Name>
   <Repository>${REGISTRY}/${entry.image}:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://${REGISTRY}/${entry.image}</Registry>
   <Network>${entry.hostNetwork ? 'host' : 'bridge'}</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -225,7 +225,7 @@ function template(entry, meta) {
   <Support>${support}</Support>
   <Project>${project}</Project>
   <Overview>${xmlEscape(overview)}</Overview>
-  <Category>${xmlEscape(entry.category || 'Tools:Utilities:')}</Category>
+  <Category>${xmlEscape(entry.category || 'Tools:Utilities')}</Category>
   <WebUI>${webui}</WebUI>
   <TemplateURL>${TEMPLATE_REPO}/templates/${entry.image}.xml</TemplateURL>
   <Icon>${icon}</Icon>

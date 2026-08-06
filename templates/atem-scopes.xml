@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>atem-scopes</Name>
   <Repository>ghcr.io/stoatworks-labs/atem-scopes:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/atem-scopes</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>

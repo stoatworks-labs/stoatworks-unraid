@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>rfutils</Name>
   <Repository>ghcr.io/stoatworks-labs/rfutils:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/rfutils</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -18,7 +18,7 @@
 Note: Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420).
 
 This container uses host networking because it discovers devices over mDNS/broadcast, which Docker's bridge network does not reliably forward. In bridge mode discovery finds nothing rather than reporting an error.</Overview>
-  <Category>Tools:Utilities:</Category>
+  <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:8420/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/rfutils.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>

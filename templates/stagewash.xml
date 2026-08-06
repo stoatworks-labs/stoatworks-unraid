@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>stagewash</Name>
   <Repository>ghcr.io/stoatworks-labs/stagewash:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/stagewash</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -14,7 +14,7 @@
   <Support>https://github.com/stoatworks-labs/stagewash/issues</Support>
   <Project>https://github.com/stoatworks-labs/stagewash</Project>
   <Overview>Stage lighting coverage calculator. Project data never leaves the browser.</Overview>
-  <Category>Tools:Utilities:</Category>
+  <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/stagewash.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>

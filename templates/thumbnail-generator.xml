@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>thumbnail-generator</Name>
   <Repository>ghcr.io/stoatworks-labs/thumbnail-generator:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/thumbnail-generator</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>

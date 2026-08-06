@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>pmse-to-wwb</Name>
   <Repository>ghcr.io/stoatworks-labs/pmse-to-wwb:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/pmse-to-wwb</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -16,7 +16,7 @@
   <Overview>Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.
 
 Note: This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces — nothing generates a Python image, and nothing needs to.</Overview>
-  <Category>Tools:Utilities:</Category>
+  <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:8000]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/pmse-to-wwb.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>

@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>pixel-peeker</Name>
   <Repository>ghcr.io/stoatworks-labs/pixel-peeker:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/pixel-peeker</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>

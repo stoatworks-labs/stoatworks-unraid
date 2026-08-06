@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>srt-router</Name>
   <Repository>ghcr.io/stoatworks-labs/srt-router:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/srt-router</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>

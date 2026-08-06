@@ -6,7 +6,7 @@
 <Container version="2">
   <Name>arraycad</Name>
   <Repository>ghcr.io/stoatworks-labs/arraycad:latest</Repository>
-  <Registry>https://github.com/orgs/stoatworks-labs/packages</Registry>
+  <Registry>https://ghcr.io/stoatworks-labs/arraycad</Registry>
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -14,7 +14,7 @@
   <Support>https://github.com/stoatworks-labs/arraycad/issues</Support>
   <Project>https://github.com/stoatworks-labs/arraycad</Project>
   <Overview>Converts CAD drawings to d&amp;b ArrayCalc and Soundvision venue data. Runs entirely in the browser.</Overview>
-  <Category>MediaApp:Music:</Category>
+  <Category>MediaApp:Music</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/arraycad.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>

@@ -29,83 +29,6 @@
   "registry": "ghcr.io/stoatworks-labs",
   "apps": [
     {
-      "repo": "nesolume",
-      "image": "nesolume-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "NESolume Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the NESolume retro console effect. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "asciify",
-      "image": "asciify-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Asciify Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Asciify ASCII-art effect. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "downpour",
-      "image": "downpour-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Downpour Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Downpour digital-rain effect. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "old-cathode",
-      "image": "old-cathode-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Old Cathode Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Old Cathode analogue-TV effect. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "porthole",
-      "image": "porthole-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Porthole Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Porthole lens-projection warp. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "resolume-luma-keyer",
-      "image": "luma-keyer-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Luma Keyer Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Resolume Luma Keyer. Runs entirely in the page; nothing is uploaded."
-    },
-    {
-      "repo": "resolume-scopes",
-      "image": "resolume-scopes-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "demo",
-      "headers": "demo/_headers",
-      "notFound": "none",
-      "title": "Resolume Scopes Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Resolume Scopes effect. Runs entirely in the page; nothing is uploaded."
-    },
-    {
       "repo": "pmse-to-wwb",
       "image": "pmse-to-wwb",
       "kind": "python-service",
@@ -116,39 +39,6 @@
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
       "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces — nothing generates a Python image, and nothing needs to."
-    },
-    {
-      "repo": "zero-eq",
-      "image": "zero-eq-sim",
-      "kind": "static-prebuilt",
-      "serveDir": "web/public",
-      "headers": null,
-      "notFound": "none",
-      "title": "Zero EQ Simulator",
-      "category": "MediaApp:Music:",
-      "desc": "Browser simulator for the Zero EQ plugin, compiled to WebAssembly. Audio never leaves the page."
-    },
-    {
-      "repo": "contourtonist",
-      "image": "contourtonist-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "web/public",
-      "headers": null,
-      "notFound": "none",
-      "title": "Contourtonist Demo",
-      "category": "MediaApp:Music:",
-      "desc": "Browser demo of Contourtonist equal-loudness EQ, compiled to WebAssembly. Audio never leaves the page."
-    },
-    {
-      "repo": "outrun",
-      "image": "outrun-demo",
-      "kind": "static-prebuilt",
-      "serveDir": "web/public",
-      "headers": null,
-      "notFound": "none",
-      "title": "Outrun Demo",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Browser demo of the Outrun FFGL effect. Runs entirely in the page; nothing is uploaded."
     },
     {
       "repo": "aspect-calc",
@@ -270,47 +160,6 @@
       "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site — it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
     },
     {
-      "repo": "stoatworks-website",
-      "image": "stoatworks-website",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "404page",
-      "nodeVersion": "22",
-      "title": "Stoatworks Website",
-      "category": "Tools:Utilities:",
-      "desc": "The Stoatworks Labs website, served locally."
-    },
-    {
-      "repo": "stoatworks-hire",
-      "image": "stoatworks-hire",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "404page",
-      "nodeVersion": "22",
-      "title": "Stoatworks Hire",
-      "category": "Tools:Utilities:",
-      "desc": "The Stoatworks Hire site, served locally.",
-      "noGit": true
-    },
-    {
-      "repo": "stoatworks-productions",
-      "image": "stoatworks-productions",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "404page",
-      "nodeVersion": "22",
-      "title": "Stoatworks Productions",
-      "category": "Tools:Utilities:",
-      "desc": "The Stoatworks Productions site, served locally.",
-      "noGit": true
-    },
-    {
       "repo": "atem-overseer",
       "image": "atem-overseer",
       "kind": "node-service",
@@ -425,16 +274,7 @@
       "title": "SRT Router",
       "category": "MediaApp:Video Tools:",
       "desc": "Crosspoint router for SRT video streams, with a web control UI.",
-      "note": "Built with default features. NDI is included but loads its runtime with dlopen at run time, so the image links no NDI SDK and ships no NDI runtime — the NDI transport is simply unavailable inside the container unless you mount a runtime yourself. The `omt` feature is left off deliberately: omt-io still links its SDK at build time, and that SDK is not redistributable.",
-      "extraImage": {
-        "image": "srt-router-demo",
-        "kind": "static-prebuilt",
-        "serveDir": "demo/dist",
-        "headers": null,
-        "notFound": "none",
-        "title": "SRT Router Demo",
-        "desc": "The recorded srt-router click-through demo. Static; routes no actual video."
-      }
+      "note": "Built with default features. NDI is included but loads its runtime with dlopen at run time, so the image links no NDI SDK and ships no NDI runtime — the NDI transport is simply unavailable inside the container unless you mount a runtime yourself. The `omt` feature is left off deliberately: omt-io still links its SDK at build time, and that SDK is not redistributable."
     },
     {
       "repo": "flock",

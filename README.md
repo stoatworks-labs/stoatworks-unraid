@@ -12,8 +12,15 @@
 Container packaging for the Stoatworks web fleet: Dockerfiles and compose files
 for each app, and Unraid Community Applications templates that install them.
 
+**Scope: the things worth running on your own server.** That is the always-on
+services — ATEM Overseer, RFutils, caspar-AV, srt-router, flock — and the
+browser tools, which are static pages you would self-host so they still work in
+a venue with no internet. It is deliberately *not* the plugin browser demos or
+the public websites: a demo shows what an effect looks like and a marketing
+site is already deployed, so neither is something anyone would install.
+
 Nothing here is written by hand. Two data files describe the fleet and two
-scripts turn them into the ~150 files spread across the app repos:
+scripts turn them into the 74 files spread across the app repos:
 
 ```
 fleet.json    what each app is and how it builds
@@ -67,11 +74,14 @@ application's JavaScript. The base headers therefore live in a snippet that
 every generated location `include`s explicitly, and everything is emitted with
 `always` so the headers survive 304s.
 
-**GHCR package visibility follows the repo.** Seven of these repos are private,
-so their packages are private too. Their templates are kept out of `templates/`
-because a public template pointing at a private package produces a pull error
-for every user who clicks Install, and that reads as a broken template rather
-than a permissions one.
+**GHCR package visibility follows the repo, and it is decided on first
+publish.** Every repo packaged here is public, so `templates-private/` is empty
+— but the machinery stays, because a public template pointing at a private
+package produces a pull error for every user who clicks Install, and that reads
+as a broken template rather than a permissions one. If an app ever starts life
+private, make its repo public *before* its first workflow run: flipping the
+repo afterwards does not retrospectively publish a package that was created
+private.
 
 ## Registering with Community Applications
 
@@ -82,11 +92,20 @@ fine by URL.
 
 ## Status
 
-The images in this repo have **never been built or run locally**. There is no
-container runtime on the machine they were authored on, so every Dockerfile
-here is derived from reading each repo's build configuration, not from a
-successful build. The GitHub Actions workflow in each repo is the first thing
-that actually compiles them; treat a red run as the image not existing yet.
+**Every image builds.** As of 2026-08-06 the workflow in each packaged repo is
+green on `main`, which is the only evidence any of this works: there is no
+container runtime on the machine these files were authored on, so every
+Dockerfile here is derived from reading each repo's build configuration rather
+than from a successful local build. A green run proves an image *builds*. It
+does not prove the app inside serves correctly, and **no container has yet been
+installed on a real Unraid server from these templates**.
+
+That first CI run was worth having. It found two things nothing else would
+have: a `react-dom` major bump in caspar-AV's console that had landed without
+`react` moving with it, so a clean `npm ci` could not resolve the tree at all;
+and a `pmse-to-wwb` image that served the repo's `site/` directory, which turns
+out to be a landing page pointing elsewhere rather than the app. A container
+build is the first clean-room install a repo ever gets.
 
 The static images do at least check their own nginx config: the build runs
 `nginx -t`, so a malformed generated config fails the build instead of

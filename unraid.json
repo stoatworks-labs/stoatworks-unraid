@@ -44,70 +44,15 @@
     "text": "Stoatworks Labs builds open tooling for live AV: video routing and switcher control, audio measurement and loudness, lighting and LED design, RF coordination, and Resolume/OpenFX plugins. This repository holds the Unraid templates for the ones that make sense on a server — the always-on services (ATEM fleet monitoring, SRT routing, device discovery, CasparCG show control, RF coordination) alongside the browser-based calculators and design tools, which run entirely in the browser and are worth self-hosting so they work in a venue with no internet. Images are built by GitHub Actions and published to GHCR. Anything that discovers devices over mDNS or broadcast ships with host networking, because Docker's bridge network silently finds nothing. Support is via GitHub issues on each project."
   },
   "apps": {
-    "nesolume-demo": {
-      "repo": "nesolume",
-      "visibility": "public",
-      "hostPort": 8500
-    },
-    "asciify-demo": {
-      "repo": "asciify",
-      "visibility": "public",
-      "hostPort": 8501
-    },
-    "downpour-demo": {
-      "repo": "downpour",
-      "visibility": "public",
-      "hostPort": 8502
-    },
-    "old-cathode-demo": {
-      "repo": "old-cathode",
-      "visibility": "public",
-      "hostPort": 8503
-    },
-    "porthole-demo": {
-      "repo": "porthole",
-      "visibility": "public",
-      "hostPort": 8504
-    },
-    "luma-keyer-demo": {
-      "repo": "resolume-luma-keyer",
-      "visibility": "public",
-      "hostPort": 8505
-    },
-    "resolume-scopes-demo": {
-      "repo": "resolume-scopes",
-      "visibility": "public",
-      "hostPort": 8506
-    },
     "pmse-to-wwb": {
       "repo": "pmse-to-wwb",
       "visibility": "public",
       "hostPort": 8507
     },
-    "zero-eq-sim": {
-      "repo": "zero-eq",
-      "visibility": "public",
-      "hostPort": 8508
-    },
-    "contourtonist-demo": {
-      "repo": "contourtonist",
-      "visibility": "public",
-      "hostPort": 8509
-    },
-    "outrun-demo": {
-      "repo": "outrun",
-      "visibility": "public",
-      "hostPort": 8510
-    },
     "atem-scopes": {
       "repo": "atem-scopes",
       "visibility": "public",
       "hostPort": 8511
-    },
-    "srt-router-demo": {
-      "repo": "srt-router",
-      "visibility": "public",
-      "hostPort": 8512
     },
     "aspect-calc": {
       "repo": "aspect-calc",
@@ -154,21 +99,6 @@
       "visibility": "public",
       "hostPort": 8528
     },
-    "stoatworks-website": {
-      "repo": "stoatworks-labs.github.io",
-      "visibility": "public",
-      "hostPort": 8530
-    },
-    "stoatworks-hire": {
-      "repo": null,
-      "visibility": "none",
-      "hostPort": 8531
-    },
-    "stoatworks-productions": {
-      "repo": null,
-      "visibility": "none",
-      "hostPort": 8532
-    },
     "atem-overseer": {
       "repo": "atem-overseer",
       "visibility": "public",
@@ -195,9 +125,5 @@
       "hostPort": 8092
     }
   },
-  "$notes": {
-    "stoatworks-website": "The working directory is `stoatworks-website` but the GitHub repo is `stoatworks-labs.github.io`. A support/icon URL built from the directory name silently 404s.",
-    "stoatworks-hire": "Not a git repository on this machine — no remote, so no CI and no published image. It gets a Dockerfile and compose file that build locally, and no CA template, because a template with nothing to pull is worse than no template.",
-    "stoatworks-productions": "Same as stoatworks-hire."
-  }
+  "$notes": {}
 }

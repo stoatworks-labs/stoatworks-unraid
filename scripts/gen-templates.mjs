@@ -50,6 +50,10 @@ function imageEntries() {
       configPath: app.configPath,
       dataPath: app.dataPath,
       portEnv: app.portEnv,
+      // Only the primary image can carry its own template; a variant or an
+      // extraImage is by definition a thin derivative of it.
+      hasOwnTemplate: !!app.hasOwnTemplate,
+      repo: app.repo,
     });
 
     for (const v of app.variants || []) {
@@ -249,6 +253,7 @@ mkdirSync(join(ROOT, 'templates'), { recursive: true });
 mkdirSync(join(ROOT, 'templates-private'), { recursive: true });
 
 const summary = { public: [], private: [], skipped: [] };
+const ownTemplates = [];
 
 for (const entry of imageEntries()) {
   const meta = unraid.apps[entry.image];
@@ -264,7 +269,38 @@ for (const entry of imageEntries()) {
   }
 
   const dir = meta.visibility === 'private' ? 'templates-private' : 'templates';
-  writeFileSync(join(ROOT, dir, `${entry.image}.xml`), template(entry, meta));
+
+  // An app whose Unraid integration is richer than this generator can express
+  // ships its own template and sets hasOwnTemplate. Re-expressing fifteen
+  // Config blocks (media paths, PUID/PGID, a GPU device, env seeds) as JSON
+  // here would put the descriptions in one repo and the thing they describe in
+  // another, and they would drift. The generator still owns what lands in
+  // templates/ — it just sources this one verbatim, and rewrites TemplateURL
+  // so the copy in CA points at THIS repo rather than at the app repo.
+  let xml;
+  if (entry.hasOwnTemplate) {
+    const own = join(PROJECTS, entry.checkoutDir || entry.repo, 'unraid', `${entry.image}.xml`);
+    if (!existsSync(own)) {
+      summary.skipped.push(
+        `${entry.image}: hasOwnTemplate but ${own} is missing — nothing to copy`,
+      );
+      continue;
+    }
+    const url = `${unraid.iconBase}/stoatworks-unraid/main/${dir}/${entry.image}.xml`;
+    xml = readFileSync(own, 'utf8')
+      .replace(/<TemplateURL\s*\/>|<TemplateURL>[\s\S]*?<\/TemplateURL>/,
+               `<TemplateURL>${url}</TemplateURL>`);
+    if (!xml.includes('<TemplateURL>')) {
+      throw new Error(
+        `${entry.image}: own template has no <TemplateURL> element to rewrite`,
+      );
+    }
+    ownTemplates.push(entry.image);
+  } else {
+    xml = template(entry, meta);
+  }
+
+  writeFileSync(join(ROOT, dir, `${entry.image}.xml`), xml);
   summary[meta.visibility === 'private' ? 'private' : 'public'].push(entry.image);
 }
 

@@ -518,7 +518,7 @@ for (const app of fleet.apps) {
   // --- primary image -------------------------------------------------------
   if (app.hasOwnDocker) {
     skipped.push(
-      `${app.repo}: Dockerfile/compose left alone (hasOwnDocker) — workflow and template only`,
+      `${app.repo}: Dockerfile/compose/.dockerignore left alone (hasOwnDocker)`,
     );
     images.push({ image: app.image, dockerfile: 'Dockerfile' });
   } else {
@@ -572,7 +572,18 @@ for (const app of fleet.apps) {
     images.push({ image: extra.image, dockerfile: `docker/Dockerfile.${extra.image}` });
   }
 
-  write(repoDir, '.github/workflows/docker.yml', workflow(app, images));
+  // An app with hasOwnWorkflow runs its own CI — tests, a multi-arch matrix, a
+  // smoke test that boots the image, a release job. Dropping the generated
+  // docker.yml alongside it means two workflows racing to push the same tags,
+  // and silently overwriting it would delete work this generator knows nothing
+  // about. Such a repo is responsible for building and pushing its own image.
+  if (app.hasOwnWorkflow) {
+    skipped.push(
+      `${app.repo}: .github/workflows/docker.yml not written (hasOwnWorkflow) — the repo builds and pushes its own image`,
+    );
+  } else {
+    write(repoDir, '.github/workflows/docker.yml', workflow(app, images));
+  }
 }
 
 console.log(`\nWrote ${written.length} files.`);

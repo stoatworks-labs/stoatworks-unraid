@@ -35,6 +35,19 @@ node scripts/gen-docker.mjs && node scripts/gen-templates.mjs
 - **`flock` had a hand-written Dockerfile before this existed** and keeps it —
   `hasOwnDocker: true`. It knows things the generator does not, notably that
   Debian's ffmpeg may not link libsrt. Do not replace it with generated output.
+- **There are three independent opt-out flags, not one.** An app may own any
+  combination of its Dockerfile, its workflow, and its template:
+
+  | flag | what the generator stops doing | why an app would want it |
+  | --- | --- | --- |
+  | `hasOwnDocker` | Dockerfile, `.dockerignore`, compose, nginx | the image is a kind this generator cannot build |
+  | `hasOwnWorkflow` | `.github/workflows/docker.yml` | the repo runs its own CI — tests, matrix, smoke test, release — and two workflows pushing the same tags race |
+  | `hasOwnTemplate` | the generated `templates/<image>.xml`; the app's `unraid/<image>.xml` is copied verbatim instead | the Unraid integration needs Config blocks this generator cannot express (media paths, PUID/PGID, devices, env seeds) |
+
+  `unfuckarr` sets all three and is the reference for what that looks like.
+  **The verbatim copy still gets its `<TemplateURL>` rewritten** to the copy in
+  *this* repo — dockerMan uses it for update checks and it must name the file
+  CA actually distributes, so the app repo leaves the element empty.
 - **The demo directories are committed, already built.** `nesolume/demo`,
   `srt-router/demo/dist`, `zero-eq/web/public` and the rest need no build stage.
   Adding one invents work with no inputs.

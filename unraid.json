@@ -3,7 +3,7 @@
     "Template-side facts, kept separate from fleet.json so the build description",
     "of an app and its packaging on Unraid can change independently.",
     "",
-    "visibility — checked with `gh repo view` on 2026-08-05, not assumed. The",
+    "visibility \u2014 checked with `gh repo view` on 2026-08-05, not assumed. The",
     "  eight browser tools were published on 2026-08-05, so nothing in the fleet",
     "  is private any more; the machinery below is kept because it is the reason",
     "  the generated output looks the way it does, and because a future app may",
@@ -26,7 +26,7 @@
     "     pointing there renders as a broken image in CA. Private templates get",
     "     no icon rather than a dead link.",
     "",
-    "hostPort — the default host port the template offers. Assigned so that a",
+    "hostPort \u2014 the default host port the template offers. Assigned so that a",
     "  server running several of these at once has no collisions out of the box.",
     "  Static sites take 8500+; services keep the port they natively listen on,",
     "  because their config files, companion modules and documentation all name",
@@ -41,7 +41,7 @@
     "icon": "https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png",
     "webPage": "https://github.com/stoatworks-labs/stoatworks-unraid",
     "forum": "https://github.com/stoatworks-labs/stoatworks-unraid/issues",
-    "text": "Stoatworks Labs builds open tooling for live AV: video routing and switcher control, audio measurement and loudness, lighting and LED design, RF coordination, and Resolume/OpenFX plugins. This repository holds the Unraid templates for the ones that make sense on a server — the always-on services (ATEM fleet monitoring, SRT routing, device discovery, CasparCG show control, RF coordination) alongside the browser-based calculators and design tools, which run entirely in the browser and are worth self-hosting so they work in a venue with no internet. Images are built by GitHub Actions and published to GHCR. Anything that discovers devices over mDNS or broadcast ships with host networking, because Docker's bridge network silently finds nothing. Support is via GitHub issues on each project."
+    "text": "Stoatworks Labs builds open tooling for live AV: video routing and switcher control, audio measurement and loudness, lighting and LED design, RF coordination, and Resolume/OpenFX plugins. This repository holds the Unraid templates for the ones that make sense on a server \u2014 the always-on services (ATEM fleet monitoring, SRT routing, device discovery, CasparCG show control, RF coordination) alongside the browser-based calculators and design tools, which run entirely in the browser and are worth self-hosting so they work in a venue with no internet. Images are built by GitHub Actions and published to GHCR. Anything that discovers devices over mDNS or broadcast ships with host networking, because Docker's bridge network silently finds nothing. Support is via GitHub issues on each project."
   },
   "apps": {
     "pmse-to-wwb": {
@@ -123,6 +123,11 @@
       "repo": "caspar-av",
       "visibility": "public",
       "hostPort": 8092
+    },
+    "unfuckarr": {
+      "repo": "unfuckarr",
+      "visibility": "public",
+      "hostPort": 6969
     }
   },
   "$notes": {}

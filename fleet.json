@@ -5,7 +5,7 @@
     "scripts/gen-docker.mjs reads this and writes Dockerfile, .dockerignore,",
     "docker-compose.yml, docker/nginx.conf and .github/workflows/docker.yml into",
     "each repo. scripts/gen-templates.mjs reads it and writes templates/*.xml for",
-    "Unraid Community Applications. Nothing here is inferred at generation time —",
+    "Unraid Community Applications. Nothing here is inferred at generation time \u2014",
     "if a build command or output directory is wrong it is wrong *here*.",
     "",
     "kind:",
@@ -24,7 +24,7 @@
     "",
     "hostNetwork: true means the app discovers devices with mDNS/broadcast, which",
     "Docker's bridge network does not reliably forward. Bridge mode does not error,",
-    "it just finds nothing — so this is not a preference, it is a correctness flag."
+    "it just finds nothing \u2014 so this is not a preference, it is a correctness flag."
   ],
   "registry": "ghcr.io/stoatworks-labs",
   "apps": [
@@ -38,7 +38,7 @@
       "category": "Tools:Utilities",
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
-      "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces — nothing generates a Python image, and nothing needs to."
+      "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
     },
     {
       "repo": "aspect-calc",
@@ -123,7 +123,7 @@
       "title": "simpleRTA",
       "category": "MediaApp:Music",
       "desc": "Real-time analyser, spectrograph and meter. Audio is captured and analysed in the page and never leaves the browser.",
-      "note": "The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP — getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN."
+      "note": "The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP \u2014 getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN."
     },
     {
       "repo": "pixel-peeker",
@@ -157,7 +157,7 @@
       "title": "ATEM Scopes",
       "category": "MediaApp:Video Tools:",
       "desc": "Waveform, vectorscope and histogram for a captured video source. Analysis happens in the page and video never leaves the browser.",
-      "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site — it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
+      "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site \u2014 it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
     },
     {
       "repo": "atem-overseer",
@@ -182,7 +182,7 @@
       "configPath": "/app/config",
       "title": "ATEM Overseer",
       "category": "MediaApp:Video Tools:",
-      "desc": "Fleet dashboard for Blackmagic ATEM switchers — status, health and restreaming across every switcher on the network.",
+      "desc": "Fleet dashboard for Blackmagic ATEM switchers \u2014 status, health and restreaming across every switcher on the network.",
       "note": "packages/server/src/discovery.ts uses multicast-dns. Bridge networking silently discovers nothing, so the template ships host networking. Devices can still be added by IP in bridge mode if you prefer isolation."
     },
     {
@@ -197,7 +197,7 @@
       "configPath": "/app/config",
       "title": "RFutils",
       "category": "Tools:Utilities",
-      "desc": "RF coordination toolkit — scanning, frequency planning and wireless monitoring in one server.",
+      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
       "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
     },
     {
@@ -223,8 +223,8 @@
       ],
       "title": "caspar-AV",
       "category": "MediaApp:Video Tools:",
-      "desc": "CasparCG show control server — cue lists, AMCP bridging and OSC control.",
-      "note": "Two things a Rust-only Dockerfile gets wrong here. `web/` is NOT tracked in git — console/vite.config.ts builds into ../web with emptyOutDir — so the image needs a Node stage before the Rust one or it ships a server whose ServeDir points at nothing and 404s every page. And `--web` defaults to the relative path `web`, which resolves against the working directory, so the runtime stage passes an absolute /app/web rather than relying on WORKDIR."
+      "desc": "CasparCG show control server \u2014 cue lists, AMCP bridging and OSC control.",
+      "note": "Two things a Rust-only Dockerfile gets wrong here. `web/` is NOT tracked in git \u2014 console/vite.config.ts builds into ../web with emptyOutDir \u2014 so the image needs a Node stage before the Rust one or it ships a server whose ServeDir points at nothing and 404s every page. And `--web` defaults to the relative path `web`, which resolves against the working directory, so the runtime stage passes an absolute /app/web rather than relying on WORKDIR."
     },
     {
       "repo": "srt-router",
@@ -274,7 +274,7 @@
       "title": "SRT Router",
       "category": "MediaApp:Video Tools:",
       "desc": "Crosspoint router for SRT video streams, with a web control UI.",
-      "note": "Built with default features. NDI is included but loads its runtime with dlopen at run time, so the image links no NDI SDK and ships no NDI runtime — the NDI transport is simply unavailable inside the container unless you mount a runtime yourself. The `omt` feature is left off deliberately: omt-io still links its SDK at build time, and that SDK is not redistributable."
+      "note": "Built with default features. NDI is included but loads its runtime with dlopen at run time, so the image links no NDI SDK and ships no NDI runtime \u2014 the NDI transport is simply unavailable inside the container unless you mount a runtime yourself. The `omt` feature is left off deliberately: omt-io still links its SDK at build time, and that SDK is not redistributable."
     },
     {
       "repo": "flock",
@@ -290,7 +290,22 @@
       "category": "MediaApp:Video Tools:",
       "desc": "Discovers and controls networked AV devices from one dashboard.",
       "hasOwnDocker": true,
-      "note": "This repo already had a hand-written Dockerfile and docker-compose.yml before this fleet sweep, and they are better informed than anything generated — in particular the note about Debian's ffmpeg possibly lacking SRT input support. The generator does NOT overwrite them. Only the CA template and the GHCR workflow are added here."
+      "note": "This repo already had a hand-written Dockerfile and docker-compose.yml before this fleet sweep, and they are better informed than anything generated \u2014 in particular the note about Debian's ffmpeg possibly lacking SRT input support. The generator does NOT overwrite them. Only the CA template and the GHCR workflow are added here."
+    },
+    {
+      "repo": "unfuckarr",
+      "image": "unfuckarr",
+      "kind": "python-service",
+      "port": 6969,
+      "hostNetwork": false,
+      "configPath": "/config",
+      "title": "unfuckarr",
+      "category": "MediaApp:Video Tools:Utilities",
+      "desc": "Scans a Sonarr/Radarr library, checks every video file is intact and will direct play in Emby, and fixes what is not \u2014 transcoding, remuxing, or deleting and re-searching. Deletes go to a recycle bin first.",
+      "hasOwnDocker": true,
+      "hasOwnWorkflow": true,
+      "hasOwnTemplate": true,
+      "note": "All three hasOwn* flags are set and each is load-bearing. hasOwnDocker: the image is a Python service with ffmpeg and a PUID/PGID entrypoint, which no generated kind produces. hasOwnWorkflow: the repo's CI runs a 78-test suite, builds multi-arch on tags, boots the image and asserts /health, and cuts the GitHub release \u2014 a generated docker.yml alongside it would race it to the same tags. hasOwnTemplate: the template needs fifteen Config blocks (media and downloads paths, PUID/PGID/UMASK/TZ, six env seeds, a /dev/dri device) that this generator cannot express; re-expressing them here would split the descriptions from the app they describe."
     }
   ]
 }

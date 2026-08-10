@@ -16,6 +16,9 @@
     "  python-service   a long-running Python server. Only ever paired with",
     "                   hasOwnDocker: no Python Dockerfile is generated, and the",
     "                   kind exists so the template reads the app's real port.",
+    "  cpp-service      a long-running C++ binary. Same deal as python-service:",
+    "                   only ever paired with hasOwnDocker, and exists so the",
+    "                   template reads the app's real port rather than 80.",
     "",
     "notFound:",
     "  spa       try_files ... /index.html   (mirrors not_found_handling = 'single-page-application')",
@@ -306,6 +309,20 @@
       "hasOwnWorkflow": true,
       "hasOwnTemplate": true,
       "note": "All three hasOwn* flags are set and each is load-bearing. hasOwnDocker: the image is a Python service with ffmpeg and a PUID/PGID entrypoint, which no generated kind produces. hasOwnWorkflow: the repo's CI runs a 78-test suite, builds multi-arch on tags, boots the image and asserts /health, and cuts the GitHub release \u2014 a generated docker.yml alongside it would race it to the same tags. hasOwnTemplate: the template needs fifteen Config blocks (media and downloads paths, PUID/PGID/UMASK/TZ, six env seeds, a /dev/dri device) that this generator cannot express; re-expressing them here would split the descriptions from the app they describe."
+    },
+    {
+      "repo": "weblinked-docker",
+      "image": "weblinked-docker",
+      "kind": "cpp-service",
+      "port": 7654,
+      "hostNetwork": true,
+      "title": "WebLinked",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Renders a web page offscreen at a broadcast raster and exact frame rate and sends it out as NDI \u2014 a dashboard, scoreboard or clock becomes a source a vision mixer can take.",
+      "hasOwnDocker": true,
+      "hasOwnWorkflow": true,
+      "hasOwnTemplate": true,
+      "note": "Packaging only \u2014 this repo holds no source. Its Dockerfile clones stoatworks-labs/weblinked at build time. All three hasOwn* flags are load-bearing. hasOwnDocker: a multi-stage build that fetches a pinned 315 MB CEF distribution and compiles C++, which no generated kind produces. hasOwnWorkflow: the build takes ~20 minutes and is amd64-only on purpose (arm64 would be QEMU-emulated for a full Chromium-wrapper compile), and its smoke test boots the image and asserts the headless render path is alive \u2014 a generated docker.yml would race it to the same tags. hasOwnTemplate: eleven Config blocks, and the NDI runtime mount needs an explanation the generator cannot carry. NOTE the libndi rule: it is dlopen'd and its licence forbids the modification and reverse engineering MIT cannot forbid, so it is NEVER baked into the image \u2014 the template mounts it at /opt/ndi/lib from a directory the user supplies."
     }
   ]
 }

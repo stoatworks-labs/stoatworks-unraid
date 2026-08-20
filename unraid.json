@@ -69,6 +69,11 @@
       "visibility": "public",
       "hostPort": 8522
     },
+    "otter-edid-editor": {
+      "repo": "otter-edid-editor",
+      "visibility": "public",
+      "hostPort": 8529
+    },
     "arraycad": {
       "repo": "arraycad",
       "visibility": "public",

@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateNginx } from './headers-to-nginx.mjs';
+import { resolveRepo } from './repo-path.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
@@ -23,7 +24,9 @@ const opt = (name, fallback) => {
   const i = args.indexOf(name);
   return i === -1 ? fallback : args[i + 1];
 };
-const PROJECTS = opt('--projects', join(process.env.HOME, 'Projects'));
+// null means "search the three discipline trees"; --projects forces the old
+// flat layout. See scripts/repo-path.mjs.
+const PROJECTS = opt('--projects', null);
 const ONLY = opt('--only', null)?.split(',').map((s) => s.trim());
 const DRY = args.includes('--dry-run');
 
@@ -507,9 +510,9 @@ function readHeaders(repoDir, headersPath) {
 
 for (const app of fleet.apps) {
   if (ONLY && !ONLY.includes(app.repo)) continue;
-  const repoDir = join(PROJECTS, app.repo);
-  if (!existsSync(repoDir)) {
-    skipped.push(`${app.repo}: directory not found at ${repoDir}`);
+  const repoDir = resolveRepo(app.checkoutDir || app.repo, PROJECTS);
+  if (!repoDir) {
+    skipped.push(`${app.repo}: no checkout found in ~/projects, ~/hardware or ~/reverse-engineering`);
     continue;
   }
 

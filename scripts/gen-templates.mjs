@@ -11,11 +11,20 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveRepo } from './repo-path.mjs';
+
+/** True when <repo>/<rel> exists on disk, wherever that repo is checked out. */
+const iconOnDisk = (repo, rel) => {
+  const dir = resolveRepo(repo, process.env.PROJECTS_DIR || null);
+  return !!dir && existsSync(join(dir, rel));
+};
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
 // Where the fleet is checked out, used only to test whether an icon file exists.
-const PROJECTS = process.env.PROJECTS_DIR || join(process.env.HOME, 'Projects');
+// null means "search the three discipline trees"; PROJECTS_DIR forces the old
+// flat layout. See scripts/repo-path.mjs.
+const PROJECTS = process.env.PROJECTS_DIR || null;
 
 const fleet = JSON.parse(readFileSync(join(ROOT, 'fleet.json'), 'utf8'));
 const unraid = JSON.parse(readFileSync(join(ROOT, 'unraid.json'), 'utf8'));
@@ -111,7 +120,7 @@ function template(entry, meta) {
   // No icon makes CA fall back to its own placeholder, which looks deliberate.
   const iconRel = 'docs/icon.png';
   const hasIcon =
-    !!entry.checkoutDir && !isPrivate && existsSync(join(PROJECTS, entry.checkoutDir, iconRel));
+    !!entry.checkoutDir && !isPrivate && iconOnDisk(entry.checkoutDir, iconRel);
   // Falling back to the Stoatworks mark rather than leaving this empty: CA's own
   // placeholder for a missing icon is a broken-image box, which reads as a
   // broken template rather than an app without artwork. The mark is served from
@@ -279,8 +288,9 @@ for (const entry of imageEntries()) {
   // so the copy in CA points at THIS repo rather than at the app repo.
   let xml;
   if (entry.hasOwnTemplate) {
-    const own = join(PROJECTS, entry.checkoutDir || entry.repo, 'unraid', `${entry.image}.xml`);
-    if (!existsSync(own)) {
+    const ownRepo = resolveRepo(entry.checkoutDir || entry.repo, PROJECTS);
+    const own = ownRepo ? join(ownRepo, 'unraid', `${entry.image}.xml`) : '';
+    if (!own || !existsSync(own)) {
       summary.skipped.push(
         `${entry.image}: hasOwnTemplate but ${own} is missing — nothing to copy`,
       );

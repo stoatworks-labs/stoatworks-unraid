@@ -80,6 +80,18 @@
       "desc": "Generates test-pattern PNGs from an output map. Runs entirely in the browser."
     },
     {
+      "repo": "otter-edid-editor",
+      "image": "otter-edid-editor",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Otter EDID Editor",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Builds and edits EDIDs, and checks them against event video processors. Runs entirely in the browser."
+    },
+    {
       "repo": "thumbnail-generator",
       "image": "thumbnail-generator",
       "kind": "static-build",

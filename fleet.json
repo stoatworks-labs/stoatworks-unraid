@@ -27,9 +27,30 @@
     "",
     "hostNetwork: true means the app discovers devices with mDNS/broadcast, which",
     "Docker's bridge network does not reliably forward. Bridge mode does not error,",
-    "it just finds nothing \u2014 so this is not a preference, it is a correctness flag."
+    "it just finds nothing \u2014 so this is not a preference, it is a correctness flag.",
+    "",
+    "actions:",
+    "  Action versions for the generated workflow, in ONE place.",
+    "",
+    "  These were hard-coded in gen-docker.mjs, which put the generator in a",
+    "  fight with Dependabot: Dependabot raised bumps against the generated",
+    "  workflow in each app repo, those PRs were merged, and the next run of",
+    "  the generator silently REVERTED all of them. Found 2026-08-20 with 8",
+    "  repos already ahead of the generator.",
+    "",
+    "  Set to the highest major ALREADY ADOPTED anywhere in the fleet, which",
+    "  is what stops a regeneration downgrading a repo. Dependabot had bumped",
+    "  repos unevenly - five were on build-push-action v7 while others sat on",
+    "  v6 - so pinning the lower one would have reverted merged PRs just as",
+    "  surely as the hard-coded versions did."
   ],
   "registry": "ghcr.io/stoatworks-labs",
+  "actions": {
+    "checkout": "v7",
+    "setupBuildx": "v4",
+    "login": "v4",
+    "buildPush": "v7"
+  },
   "apps": [
     {
       "repo": "pmse-to-wwb",

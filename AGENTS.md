@@ -53,6 +53,28 @@ node scripts/gen-docker.mjs && node scripts/gen-templates.mjs
   Adding one invents work with no inputs.
 - **`.dockerignore` paths need leading slashes.** A bare `dist` also matches
   `demo/dist`, which is the entire payload of the srt-router demo image.
+- **The generator and Dependabot will fight over action versions, and the
+  generator wins silently.** The workflow it emits is a generated file, so
+  Dependabot raises bumps against it *in each app repo*; those get merged; and
+  the next `gen-docker.mjs` run reverts every one of them without saying so.
+  Found 2026-08-20 with eight repos already ahead of the generator, and the
+  fleet bumped unevenly — five were on `build-push-action@v7` while the rest
+  sat on v6.
+
+  The versions now live in **`fleet.json` → `actions`**, so there is one place
+  to bump. Two rules follow:
+  1. When a Dependabot PR bumps one of these in an app repo, bump it here too.
+  2. Pin to the **highest major already adopted anywhere in the fleet**. Pinning
+     lower reverts merged PRs exactly as the hard-coded versions did.
+
+  Check before committing a regeneration:
+
+  ```bash
+  git -C <repo> diff -U0 .github/workflows/docker.yml | grep -E '^[+-].*uses:'
+  ```
+
+  A removed version higher than the added one is a downgrade — stop.
+
 - **zsh does not word-split unquoted variables.** A `for d in $REPOS` loop over
   a plain string silently iterates once with the whole string as one word. Use
   an array.

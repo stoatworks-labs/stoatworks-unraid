@@ -34,6 +34,10 @@ const fleet = JSON.parse(readFileSync(join(ROOT, 'fleet.json'), 'utf8'));
 const unraid = JSON.parse(readFileSync(join(ROOT, 'unraid.json'), 'utf8'));
 const REGISTRY = fleet.registry;
 
+// Pinned in fleet.json, not here. Hard-coding them made every regeneration
+// revert whatever Dependabot had bumped in the app repos.
+const ACT = fleet.actions;
+
 // GitHub Actions minutes are only billed for private repositories. Public repos
 // build for free and can afford a pull_request trigger; private ones would pay
 // for a full image build on every push to every branch of every PR, which for
@@ -445,23 +449,23 @@ jobs:
 ${matrix}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@${ACT.checkout}
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@${ACT.setupBuildx}
 
       # Only log in for pushes. Pull requests from forks have no package write
       # token, and a login step that fails there turns every PR red for a
       # reason that has nothing to do with the change.
       - name: Log in to GHCR
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@${ACT.login}
         with:
           registry: ghcr.io
           username: \${{ github.actor }}
           password: \${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@${ACT.buildPush}
         with:
           context: \${{ matrix.context }}
           file: \${{ matrix.dockerfile }}

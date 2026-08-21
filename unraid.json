@@ -88,6 +88,11 @@
       "visibility": "public",
       "hostPort": null
     },
+    "livepremier-plus": {
+      "repo": "livepremier-plus",
+      "visibility": "public",
+      "hostPort": 8535
+    },
     "mynah": {
       "visibility": "public",
       "hostPort": 8534

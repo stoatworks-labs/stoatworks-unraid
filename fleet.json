@@ -53,6 +53,21 @@
   },
   "apps": [
     {
+      "repo": "RFutils",
+      "image": "rfutils",
+      "kind": "node-service",
+      "buildCmd": "npm run build",
+      "serverDir": "packages/server",
+      "port": 8420,
+      "portEnv": "RFUTILS_SERVER_PORT",
+      "hostNetwork": true,
+      "configPath": "/app/config",
+      "title": "RFutils",
+      "category": "Tools:Utilities",
+      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
+      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
+    },
+    {
       "repo": "aquilon-vpu-map",
       "image": "aquilon-vpu-map",
       "kind": "node-service",
@@ -213,6 +228,18 @@
       "note": "This repo already had a hand-written Dockerfile and docker-compose.yml before this fleet sweep, and they are better informed than anything generated \u2014 in particular the note about Debian's ffmpeg possibly lacking SRT input support. The generator does NOT overwrite them. Only the CA template and the GHCR workflow are added here."
     },
     {
+      "repo": "livepremier-plus",
+      "image": "livepremier-plus",
+      "kind": "node-service",
+      "port": 8535,
+      "hostNetwork": false,
+      "title": "LivePremier Plus",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Adds a VPU resource map, a lighting-desk command line, a theatre cue stack, MIDI control-surface mapping and arithmetic in numeric fields to an Analog Way LivePremier's own Web RCS. Point it at a switcher and browse to it instead of to the device; it proxies the vendor interface and injects the extra panels, so it contains no part of Analog Way's software.",
+      "hasOwnDocker": true,
+      "note": "Point it at a switcher and open it in any browser. hasOwnDocker because the Dockerfile is hand-written: this app has no build step and no dist/, and it needs a /config volume for cue stacks and the remembered device. Bridge networking is deliberate \u2014 it discovers nothing and makes one outbound connection to the address you type. It DOES write to the switcher (cue takes, preset recalls, MIDI moves), unlike aquilon-vpu-map."
+    },
+    {
       "repo": "mynah",
       "image": "mynah",
       "kind": "static-build",
@@ -268,21 +295,6 @@
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
       "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
-    },
-    {
-      "repo": "RFutils",
-      "image": "rfutils",
-      "kind": "node-service",
-      "buildCmd": "npm run build",
-      "serverDir": "packages/server",
-      "port": 8420,
-      "portEnv": "RFUTILS_SERVER_PORT",
-      "hostNetwork": true,
-      "configPath": "/app/config",
-      "title": "RFutils",
-      "category": "Tools:Utilities",
-      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
-      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
     },
     {
       "repo": "simpleRTA",

@@ -356,6 +356,18 @@
       "hasOwnWorkflow": true,
       "hasOwnTemplate": true,
       "note": "Packaging only \u2014 this repo holds no source. Its Dockerfile clones stoatworks-labs/weblinked at build time. All three hasOwn* flags are load-bearing. hasOwnDocker: a multi-stage build that fetches a pinned 315 MB CEF distribution and compiles C++, which no generated kind produces. hasOwnWorkflow: the build takes ~20 minutes and is amd64-only on purpose (arm64 would be QEMU-emulated for a full Chromium-wrapper compile), and its smoke test boots the image and asserts the headless render path is alive \u2014 a generated docker.yml would race it to the same tags. hasOwnTemplate: eleven Config blocks, and the NDI runtime mount needs an explanation the generator cannot carry. NOTE the libndi rule: it is dlopen'd and its licence forbids the modification and reverse engineering MIT cannot forbid, so it is NEVER baked into the image \u2014 the template mounts it at /opt/ndi/lib from a directory the user supplies."
+    },
+    {
+      "repo": "aquilon-vpu-map",
+      "image": "aquilon-vpu-map",
+      "kind": "node-service",
+      "port": 8531,
+      "hostNetwork": false,
+      "title": "Aquilon VPU Map",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Shows how an Analog Way LivePremier has allocated its VPU mixers across screens, layers and slices \u2014 what each screen is spending, what is left, and what a pending configuration would change. Reads only; it never writes to the switcher.",
+      "hasOwnDocker": true,
+      "note": "Reads only \u2014 it issues AWJ `get` and never writes to the switcher, so it is safe to leave running against a live rig. Bridge networking is deliberate: it discovers nothing and makes one outbound connection to the address you type, so it needs no host networking. hasOwnDocker because the repo's Dockerfile is hand-written and its CI runs the container and checks /api/health \u2014 a generated one would build for a `npm run build` and a dist/ this app does not have."
     }
   ]
 }

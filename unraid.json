@@ -138,6 +138,10 @@
       "repo": "weblinked-docker",
       "visibility": "public",
       "hostPort": null
+    },
+    "aquilon-vpu-map": {
+      "visibility": "public",
+      "hostPort": 8531
     }
   },
   "$notes": {}

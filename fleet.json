@@ -53,21 +53,6 @@
   },
   "apps": [
     {
-      "repo": "RFutils",
-      "image": "rfutils",
-      "kind": "node-service",
-      "buildCmd": "npm run build",
-      "serverDir": "packages/server",
-      "port": 8420,
-      "portEnv": "RFUTILS_SERVER_PORT",
-      "hostNetwork": true,
-      "configPath": "/app/config",
-      "title": "RFutils",
-      "category": "Tools:Utilities",
-      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
-      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
-    },
-    {
       "repo": "aquilon-vpu-map",
       "image": "aquilon-vpu-map",
       "kind": "node-service",
@@ -141,6 +126,37 @@
       "category": "MediaApp:Video Tools:",
       "desc": "Waveform, vectorscope and histogram for a captured video source. Analysis happens in the page and video never leaves the browser.",
       "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site \u2014 it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
+    },
+    {
+      "repo": "blackmatrix",
+      "image": "blackmatrix",
+      "kind": "node-service",
+      "buildCmd": "npm run build",
+      "serverDir": "packages/server",
+      "port": 8533,
+      "extraPorts": [
+        {
+          "port": 9990,
+          "proto": "tcp",
+          "what": "Videohub protocol for router panels \u2014 one port per switcher, 9990 upward"
+        },
+        {
+          "port": 9991,
+          "proto": "tcp",
+          "what": "Videohub protocol, second switcher"
+        },
+        {
+          "port": 9992,
+          "proto": "tcp",
+          "what": "Videohub protocol, third switcher"
+        }
+      ],
+      "hostNetwork": true,
+      "configPath": "/app/config",
+      "title": "BlackMatrix",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Crosspoint router matrix for Blackmagic ATEM switchers and Videohubs \u2014 one grid across the fleet, with Videohub protocol emulation so hardware router panels drive it.",
+      "note": "Two reasons for host networking, both of which fail silently in bridge mode: the device scan sweeps the local /24s and would sweep Docker's bridge instead, and the Videohub emulation LISTENS on a port per switcher (9990 upward) for panels to connect to. Devices can still be added by IP without the scan."
     },
     {
       "repo": "blend-calc",
@@ -252,6 +268,21 @@
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
       "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
+    },
+    {
+      "repo": "RFutils",
+      "image": "rfutils",
+      "kind": "node-service",
+      "buildCmd": "npm run build",
+      "serverDir": "packages/server",
+      "port": 8420,
+      "portEnv": "RFUTILS_SERVER_PORT",
+      "hostNetwork": true,
+      "configPath": "/app/config",
+      "title": "RFutils",
+      "category": "Tools:Utilities",
+      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
+      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
     },
     {
       "repo": "simpleRTA",

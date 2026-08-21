@@ -68,6 +68,11 @@
       "visibility": "public",
       "hostPort": 8511
     },
+    "blackmatrix": {
+      "repo": "blackmatrix",
+      "visibility": "private",
+      "hostPort": null
+    },
     "blend-calc": {
       "repo": "blend-calc",
       "visibility": "public",

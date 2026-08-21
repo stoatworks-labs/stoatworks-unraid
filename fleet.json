@@ -53,76 +53,31 @@
   },
   "apps": [
     {
-      "repo": "pmse-to-wwb",
-      "image": "pmse-to-wwb",
-      "kind": "python-service",
-      "port": 8000,
+      "repo": "RFutils",
+      "image": "rfutils",
+      "kind": "node-service",
+      "buildCmd": "npm run build",
+      "serverDir": "packages/server",
+      "port": 8420,
+      "portEnv": "RFUTILS_SERVER_PORT",
+      "hostNetwork": true,
+      "configPath": "/app/config",
+      "title": "RFutils",
+      "category": "Tools:Utilities",
+      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
+      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
+    },
+    {
+      "repo": "aquilon-vpu-map",
+      "image": "aquilon-vpu-map",
+      "kind": "node-service",
+      "port": 8531,
       "hostNetwork": false,
-      "title": "PMSE to WWB",
-      "category": "Tools:Utilities",
-      "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
+      "title": "Aquilon VPU Map",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Shows how an Analog Way LivePremier has allocated its VPU mixers across screens, layers and slices \u2014 what each screen is spending, what is left, and what a pending configuration would change. Reads only; it never writes to the switcher.",
       "hasOwnDocker": true,
-      "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
-    },
-    {
-      "repo": "aspect-calc",
-      "image": "aspect-calc",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Aspect Calc",
-      "category": "Tools:Utilities",
-      "desc": "Aspect ratio, pixel pitch and screen geometry calculator. Runs entirely in the browser."
-    },
-    {
-      "repo": "blend-calc",
-      "image": "blend-calc",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Blend Calc",
-      "category": "Tools:Utilities",
-      "desc": "Projector edge-blend calculator with Resolume export. Runs entirely in the browser."
-    },
-    {
-      "repo": "test-card",
-      "image": "test-card",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Test Card",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Generates test-pattern PNGs from an output map. Runs entirely in the browser."
-    },
-    {
-      "repo": "otter-edid-editor",
-      "image": "otter-edid-editor",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Otter EDID Editor",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Builds and edits EDIDs, and checks them against event video processors. Runs entirely in the browser."
-    },
-    {
-      "repo": "thumbnail-generator",
-      "image": "thumbnail-generator",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Thumbnail Generator",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Builds labelled source thumbnail cards for a multiviewer, downloaded as a ZIP. Runs entirely in the browser."
+      "note": "Reads only \u2014 it issues AWJ `get` and never writes to the switcher, so it is safe to leave running against a live rig. Bridge networking is deliberate: it discovers nothing and makes one outbound connection to the address you type, so it needs no host networking. hasOwnDocker because the repo's Dockerfile is hand-written and its CI runs the container and checks /api/health \u2014 a generated one would build for a `npm run build` and a dist/ this app does not have."
     },
     {
       "repo": "arraycad",
@@ -137,63 +92,16 @@
       "desc": "Converts CAD drawings to d&b ArrayCalc and Soundvision venue data. Runs entirely in the browser."
     },
     {
-      "repo": "stagewash",
-      "image": "stagewash",
+      "repo": "aspect-calc",
+      "image": "aspect-calc",
       "kind": "static-build",
       "buildCmd": "npm run build",
       "outDir": "dist",
       "headers": "public/_headers",
-      "notFound": "spa",
-      "title": "Stagewash",
+      "notFound": "none",
+      "title": "Aspect Calc",
       "category": "Tools:Utilities",
-      "desc": "Stage lighting coverage calculator. Project data never leaves the browser."
-    },
-    {
-      "repo": "simpleRTA",
-      "image": "simple-rta",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "spa",
-      "title": "simpleRTA",
-      "category": "MediaApp:Music",
-      "desc": "Real-time analyser, spectrograph and meter. Audio is captured and analysed in the page and never leaves the browser.",
-      "note": "The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP \u2014 getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN."
-    },
-    {
-      "repo": "pixel-peeker",
-      "image": "pixel-peeker",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "spa",
-      "title": "Pixel Peeker",
-      "category": "MediaApp:Video Tools:",
-      "desc": "LED wall designer and capacity calculator. Runs entirely in the browser.",
-      "variants": [
-        {
-          "image": "pixel-peeker-lite",
-          "buildCmd": "npm run build:lite",
-          "outDir": "dist-lite",
-          "title": "Pixel Peeker Lite",
-          "desc": "Pixel Peeker without the NovaStar export path. Runs entirely in the browser."
-        }
-      ]
-    },
-    {
-      "repo": "atem-scopes",
-      "image": "atem-scopes",
-      "kind": "static-build",
-      "buildCmd": "npm run static:build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "spa",
-      "title": "ATEM Scopes",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Waveform, vectorscope and histogram for a captured video source. Analysis happens in the page and video never leaves the browser.",
-      "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site \u2014 it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
+      "desc": "Aspect ratio, pixel pitch and screen geometry calculator. Runs entirely in the browser."
     },
     {
       "repo": "atem-overseer",
@@ -222,19 +130,29 @@
       "note": "packages/server/src/discovery.ts uses multicast-dns. Bridge networking silently discovers nothing, so the template ships host networking. Devices can still be added by IP in bridge mode if you prefer isolation."
     },
     {
-      "repo": "RFutils",
-      "image": "rfutils",
-      "kind": "node-service",
+      "repo": "atem-scopes",
+      "image": "atem-scopes",
+      "kind": "static-build",
+      "buildCmd": "npm run static:build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "spa",
+      "title": "ATEM Scopes",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Waveform, vectorscope and histogram for a captured video source. Analysis happens in the page and video never leaves the browser.",
+      "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site \u2014 it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
+    },
+    {
+      "repo": "blend-calc",
+      "image": "blend-calc",
+      "kind": "static-build",
       "buildCmd": "npm run build",
-      "serverDir": "packages/server",
-      "port": 8420,
-      "portEnv": "RFUTILS_SERVER_PORT",
-      "hostNetwork": true,
-      "configPath": "/app/config",
-      "title": "RFutils",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Blend Calc",
       "category": "Tools:Utilities",
-      "desc": "RF coordination toolkit \u2014 scanning, frequency planning and wireless monitoring in one server.",
-      "note": "Discovers receivers over the LAN, so the template ships host networking. Port is read from RFUTILS_SERVER_PORT (falling back to PORT, then 8420)."
+      "desc": "Projector edge-blend calculator with Resolume export. Runs entirely in the browser."
     },
     {
       "repo": "caspar-av",
@@ -261,6 +179,92 @@
       "category": "MediaApp:Video Tools:",
       "desc": "CasparCG show control server \u2014 cue lists, AMCP bridging and OSC control.",
       "note": "Two things a Rust-only Dockerfile gets wrong here. `web/` is NOT tracked in git \u2014 console/vite.config.ts builds into ../web with emptyOutDir \u2014 so the image needs a Node stage before the Rust one or it ships a server whose ServeDir points at nothing and 404s every page. And `--web` defaults to the relative path `web`, which resolves against the working directory, so the runtime stage passes an absolute /app/web rather than relying on WORKDIR."
+    },
+    {
+      "repo": "flock",
+      "image": "flock",
+      "kind": "rust-service",
+      "cargoPackage": "flock",
+      "binary": "flock",
+      "port": 8080,
+      "hostNetwork": true,
+      "configPath": "/app/config",
+      "dataPath": "/app/data",
+      "title": "flock",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Discovers and controls networked AV devices from one dashboard.",
+      "hasOwnDocker": true,
+      "note": "This repo already had a hand-written Dockerfile and docker-compose.yml before this fleet sweep, and they are better informed than anything generated \u2014 in particular the note about Debian's ffmpeg possibly lacking SRT input support. The generator does NOT overwrite them. Only the CA template and the GHCR workflow are added here."
+    },
+    {
+      "repo": "mynah",
+      "image": "mynah",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Mynah",
+      "category": "MediaApp:Video Tools:",
+      "desc": "A lighting-desk command line for Analog Way LivePremier switchers. Self-host it on the show network: the switcher is http-only, so a https copy cannot reach one."
+    },
+    {
+      "repo": "otter-edid-editor",
+      "image": "otter-edid-editor",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Otter EDID Editor",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Builds and edits EDIDs, and checks them against event video processors. Runs entirely in the browser."
+    },
+    {
+      "repo": "pixel-peeker",
+      "image": "pixel-peeker",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "spa",
+      "title": "Pixel Peeker",
+      "category": "MediaApp:Video Tools:",
+      "desc": "LED wall designer and capacity calculator. Runs entirely in the browser.",
+      "variants": [
+        {
+          "image": "pixel-peeker-lite",
+          "buildCmd": "npm run build:lite",
+          "outDir": "dist-lite",
+          "title": "Pixel Peeker Lite",
+          "desc": "Pixel Peeker without the NovaStar export path. Runs entirely in the browser."
+        }
+      ]
+    },
+    {
+      "repo": "pmse-to-wwb",
+      "image": "pmse-to-wwb",
+      "kind": "python-service",
+      "port": 8000,
+      "hostNetwork": false,
+      "title": "PMSE to WWB",
+      "category": "Tools:Utilities",
+      "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
+      "hasOwnDocker": true,
+      "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
+    },
+    {
+      "repo": "simpleRTA",
+      "image": "simple-rta",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "spa",
+      "title": "simpleRTA",
+      "category": "MediaApp:Music",
+      "desc": "Real-time analyser, spectrograph and meter. Audio is captured and analysed in the page and never leaves the browser.",
+      "note": "The CSP in public/_headers allows microphone capture from 'self' only. Serving this over plain HTTP from a non-localhost address will make the browser refuse microphone access regardless of the CSP \u2014 getUserMedia requires a secure context. Put it behind your reverse proxy's TLS if you want it on the LAN."
     },
     {
       "repo": "srt-router",
@@ -313,20 +317,40 @@
       "note": "Built with default features. NDI is included but loads its runtime with dlopen at run time, so the image links no NDI SDK and ships no NDI runtime \u2014 the NDI transport is simply unavailable inside the container unless you mount a runtime yourself. The `omt` feature is left off deliberately: omt-io still links its SDK at build time, and that SDK is not redistributable."
     },
     {
-      "repo": "flock",
-      "image": "flock",
-      "kind": "rust-service",
-      "cargoPackage": "flock",
-      "binary": "flock",
-      "port": 8080,
-      "hostNetwork": true,
-      "configPath": "/app/config",
-      "dataPath": "/app/data",
-      "title": "flock",
+      "repo": "stagewash",
+      "image": "stagewash",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "spa",
+      "title": "Stagewash",
+      "category": "Tools:Utilities",
+      "desc": "Stage lighting coverage calculator. Project data never leaves the browser."
+    },
+    {
+      "repo": "test-card",
+      "image": "test-card",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Test Card",
       "category": "MediaApp:Video Tools:",
-      "desc": "Discovers and controls networked AV devices from one dashboard.",
-      "hasOwnDocker": true,
-      "note": "This repo already had a hand-written Dockerfile and docker-compose.yml before this fleet sweep, and they are better informed than anything generated \u2014 in particular the note about Debian's ffmpeg possibly lacking SRT input support. The generator does NOT overwrite them. Only the CA template and the GHCR workflow are added here."
+      "desc": "Generates test-pattern PNGs from an output map. Runs entirely in the browser."
+    },
+    {
+      "repo": "thumbnail-generator",
+      "image": "thumbnail-generator",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Thumbnail Generator",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Builds labelled source thumbnail cards for a multiviewer, downloaded as a ZIP. Runs entirely in the browser."
     },
     {
       "repo": "unfuckarr",
@@ -356,18 +380,6 @@
       "hasOwnWorkflow": true,
       "hasOwnTemplate": true,
       "note": "Packaging only \u2014 this repo holds no source. Its Dockerfile clones stoatworks-labs/weblinked at build time. All three hasOwn* flags are load-bearing. hasOwnDocker: a multi-stage build that fetches a pinned 315 MB CEF distribution and compiles C++, which no generated kind produces. hasOwnWorkflow: the build takes ~20 minutes and is amd64-only on purpose (arm64 would be QEMU-emulated for a full Chromium-wrapper compile), and its smoke test boots the image and asserts the headless render path is alive \u2014 a generated docker.yml would race it to the same tags. hasOwnTemplate: eleven Config blocks, and the NDI runtime mount needs an explanation the generator cannot carry. NOTE the libndi rule: it is dlopen'd and its licence forbids the modification and reverse engineering MIT cannot forbid, so it is NEVER baked into the image \u2014 the template mounts it at /opt/ndi/lib from a directory the user supplies."
-    },
-    {
-      "repo": "aquilon-vpu-map",
-      "image": "aquilon-vpu-map",
-      "kind": "node-service",
-      "port": 8531,
-      "hostNetwork": false,
-      "title": "Aquilon VPU Map",
-      "category": "MediaApp:Video Tools:",
-      "desc": "Shows how an Analog Way LivePremier has allocated its VPU mixers across screens, layers and slices \u2014 what each screen is spending, what is left, and what a pending configuration would change. Reads only; it never writes to the switcher.",
-      "hasOwnDocker": true,
-      "note": "Reads only \u2014 it issues AWJ `get` and never writes to the switcher, so it is safe to leave running against a live rig. Bridge networking is deliberate: it discovers nothing and makes one outbound connection to the address you type, so it needs no host networking. hasOwnDocker because the repo's Dockerfile is hand-written and its CI runs the container and checks /api/health \u2014 a generated one would build for a `npm run build` and a dist/ this app does not have."
     }
   ]
 }

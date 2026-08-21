@@ -44,50 +44,53 @@
     "text": "Stoatworks Labs builds open tooling for live AV: video routing and switcher control, audio measurement and loudness, lighting and LED design, RF coordination, and Resolume/OpenFX plugins. This repository holds the Unraid templates for the ones that make sense on a server \u2014 the always-on services (ATEM fleet monitoring, SRT routing, device discovery, CasparCG show control, RF coordination) alongside the browser-based calculators and design tools, which run entirely in the browser and are worth self-hosting so they work in a venue with no internet. Images are built by GitHub Actions and published to GHCR. Anything that discovers devices over mDNS or broadcast ships with host networking, because Docker's bridge network silently finds nothing. Support is via GitHub issues on each project."
   },
   "apps": {
-    "pmse-to-wwb": {
-      "repo": "pmse-to-wwb",
+    "aquilon-vpu-map": {
       "visibility": "public",
-      "hostPort": 8507
-    },
-    "atem-scopes": {
-      "repo": "atem-scopes",
-      "visibility": "public",
-      "hostPort": 8511
-    },
-    "aspect-calc": {
-      "repo": "aspect-calc",
-      "visibility": "public",
-      "hostPort": 8520
-    },
-    "blend-calc": {
-      "repo": "blend-calc",
-      "visibility": "public",
-      "hostPort": 8521
-    },
-    "test-card": {
-      "repo": "test-card",
-      "visibility": "public",
-      "hostPort": 8522
-    },
-    "otter-edid-editor": {
-      "repo": "otter-edid-editor",
-      "visibility": "public",
-      "hostPort": 8529
+      "hostPort": 8531
     },
     "arraycad": {
       "repo": "arraycad",
       "visibility": "public",
       "hostPort": 8523
     },
-    "stagewash": {
-      "repo": "stagewash",
+    "aspect-calc": {
+      "repo": "aspect-calc",
       "visibility": "public",
-      "hostPort": 8524
+      "hostPort": 8520
     },
-    "simple-rta": {
-      "repo": "simpleRTA",
+    "atem-overseer": {
+      "repo": "atem-overseer",
       "visibility": "public",
-      "hostPort": 8525
+      "hostPort": null
+    },
+    "atem-scopes": {
+      "repo": "atem-scopes",
+      "visibility": "public",
+      "hostPort": 8511
+    },
+    "blend-calc": {
+      "repo": "blend-calc",
+      "visibility": "public",
+      "hostPort": 8521
+    },
+    "caspar-av": {
+      "repo": "caspar-av",
+      "visibility": "public",
+      "hostPort": 8092
+    },
+    "flock": {
+      "repo": "flock",
+      "visibility": "public",
+      "hostPort": null
+    },
+    "mynah": {
+      "visibility": "public",
+      "hostPort": 8534
+    },
+    "otter-edid-editor": {
+      "repo": "otter-edid-editor",
+      "visibility": "public",
+      "hostPort": 8529
     },
     "pixel-peeker": {
       "repo": "pixel-peeker",
@@ -99,35 +102,40 @@
       "visibility": "public",
       "hostPort": 8527
     },
-    "thumbnail-generator": {
-      "repo": "thumbnail-generator",
+    "pmse-to-wwb": {
+      "repo": "pmse-to-wwb",
       "visibility": "public",
-      "hostPort": 8528
-    },
-    "atem-overseer": {
-      "repo": "atem-overseer",
-      "visibility": "public",
-      "hostPort": null
+      "hostPort": 8507
     },
     "rfutils": {
       "repo": "RFutils",
       "visibility": "public",
       "hostPort": null
     },
+    "simple-rta": {
+      "repo": "simpleRTA",
+      "visibility": "public",
+      "hostPort": 8525
+    },
     "srt-router": {
       "repo": "srt-router",
       "visibility": "public",
       "hostPort": null
     },
-    "flock": {
-      "repo": "flock",
+    "stagewash": {
+      "repo": "stagewash",
       "visibility": "public",
-      "hostPort": null
+      "hostPort": 8524
     },
-    "caspar-av": {
-      "repo": "caspar-av",
+    "test-card": {
+      "repo": "test-card",
       "visibility": "public",
-      "hostPort": 8092
+      "hostPort": 8522
+    },
+    "thumbnail-generator": {
+      "repo": "thumbnail-generator",
+      "visibility": "public",
+      "hostPort": 8528
     },
     "unfuckarr": {
       "repo": "unfuckarr",
@@ -138,10 +146,6 @@
       "repo": "weblinked-docker",
       "visibility": "public",
       "hostPort": null
-    },
-    "aquilon-vpu-map": {
-      "visibility": "public",
-      "hostPort": 8531
     }
   },
   "$notes": {}

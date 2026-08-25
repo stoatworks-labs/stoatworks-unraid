@@ -143,6 +143,17 @@
       "note": "buildCmd is `static:build`, NOT `build`. In this repo `npm run build` is `electron-vite build` and produces the desktop app, not the static site \u2014 it would populate out/ and leave dist/ stale or absent, and the image would either fail to copy or silently serve an old build."
     },
     {
+      "repo": "birddog-play-flasher",
+      "image": "birddog-play-flasher",
+      "kind": "static-prebuilt",
+      "serveDir": "public",
+      "notFound": "none",
+      "title": "BirdDog PLAY Flasher",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Flashes a BirdDog PLAY decoder in recovery mode over WebUSB, and can inject a firmware package on the way so the unit installs it on first boot.",
+      "note": "WebUSB needs a secure context. Served over plain http at a LAN address there is no navigator.usb at all, so the container cannot reach a device \u2014 open it at http://localhost:PORT on the machine holding the USB cable, or put a TLS terminator in front of it. This fails silently rather than loudly: the page loads and simply offers no device. This app is nothing but WebUSB, so without it there is no fallback at all. public/ is committed already built, hence no build stage; there is no _headers file in this repo, so the image carries the default header set."
+    },
+    {
       "repo": "blackmatrix",
       "image": "blackmatrix",
       "kind": "node-service",
@@ -252,6 +263,19 @@
       "desc": "A lighting-desk command line for Analog Way LivePremier switchers. Self-host it on the show network: the switcher is http-only, so a https copy cannot reach one."
     },
     {
+      "repo": "openflash",
+      "image": "openflash",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "openflash",
+      "category": "Tools:Utilities",
+      "desc": "Installs LineageOS and other alternative Android systems onto a phone from a browser, over WebUSB. Detects the handset and generates the procedure for that exact device.",
+      "note": "WebUSB needs a secure context. Served over plain http at a LAN address there is no navigator.usb at all, so the container cannot reach a device \u2014 open it at http://localhost:PORT on the machine holding the USB cable, or put a TLS terminator in front of it. This fails silently rather than loudly: the page loads and simply offers no device. Without WebUSB the page is still a correct, ordered, device-specific adb and fastboot command list, which is most of its value."
+    },
+    {
       "repo": "otter-edid-editor",
       "image": "otter-edid-editor",
       "kind": "static-build",
@@ -295,6 +319,18 @@
       "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
       "hasOwnDocker": true,
       "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
+    },
+    {
+      "repo": "pptx-font-manager",
+      "image": "pptx-font-manager",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "PowerPoint Font Manager",
+      "category": "Tools:Utilities",
+      "desc": "Reports which fonts a .pptx actually uses, which of those are installed, and what to do about the rest. Runs entirely in the browser."
     },
     {
       "repo": "simpleRTA",
@@ -423,6 +459,18 @@
       "hasOwnWorkflow": true,
       "hasOwnTemplate": true,
       "note": "Packaging only \u2014 this repo holds no source. Its Dockerfile clones stoatworks-labs/weblinked at build time. All three hasOwn* flags are load-bearing. hasOwnDocker: a multi-stage build that fetches a pinned 315 MB CEF distribution and compiles C++, which no generated kind produces. hasOwnWorkflow: the build takes ~20 minutes and is amd64-only on purpose (arm64 would be QEMU-emulated for a full Chromium-wrapper compile), and its smoke test boots the image and asserts the headless render path is alive \u2014 a generated docker.yml would race it to the same tags. hasOwnTemplate: eleven Config blocks, and the NDI runtime mount needs an explanation the generator cannot carry. NOTE the libndi rule: it is dlopen'd and its licence forbids the modification and reverse engineering MIT cannot forbid, so it is NEVER baked into the image \u2014 the template mounts it at /opt/ndi/lib from a directory the user supplies."
+    },
+    {
+      "repo": "willmyshowfit",
+      "image": "willmyshowfit",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Will My Show Fit?",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Describe a show \u2014 screens, canvases, layers, sources and destinations \u2014 and it works out which switchers will actually take it. Runs entirely in the browser."
     }
   ]
 }

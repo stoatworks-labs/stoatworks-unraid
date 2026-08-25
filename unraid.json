@@ -68,6 +68,10 @@
       "visibility": "public",
       "hostPort": 8511
     },
+    "birddog-play-flasher": {
+      "visibility": "public",
+      "hostPort": 8539
+    },
     "blackmatrix": {
       "repo": "blackmatrix",
       "visibility": "private",
@@ -97,6 +101,10 @@
       "visibility": "public",
       "hostPort": 8534
     },
+    "openflash": {
+      "visibility": "public",
+      "hostPort": 8536
+    },
     "otter-edid-editor": {
       "repo": "otter-edid-editor",
       "visibility": "public",
@@ -116,6 +124,10 @@
       "repo": "pmse-to-wwb",
       "visibility": "public",
       "hostPort": 8507
+    },
+    "pptx-font-manager": {
+      "visibility": "public",
+      "hostPort": 8538
     },
     "rfutils": {
       "repo": "RFutils",
@@ -156,6 +168,10 @@
       "repo": "weblinked-docker",
       "visibility": "public",
       "hostPort": null
+    },
+    "willmyshowfit": {
+      "visibility": "public",
+      "hostPort": 8537
     }
   },
   "$notes": {}

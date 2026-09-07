@@ -489,6 +489,100 @@ ${matrix}
 }
 
 // ---------------------------------------------------------------------------
+// README section — "Run your own copy"
+// ---------------------------------------------------------------------------
+
+// Only the browser tools get this. They are the things a person would look up
+// how to self-host, and none of their READMEs said a word about the image that
+// had been building for a month. The services (flock, srt-router, ...) document
+// their own containers in their own words, and a generated paragraph beside
+// that would say the same thing twice, slightly differently.
+//
+// It lives between markers so a regeneration replaces exactly this section and
+// nothing else, the same arrangement as the fleet's downloads and attributions
+// blocks. Without markers it is inserted ahead of the attributions block or the
+// licence heading, whichever comes first, so it never lands after the licence.
+const README_START = '<!-- selfhost:start -->';
+const README_END = '<!-- selfhost:end -->';
+const UNRAID_REPO = 'https://github.com/stoatworks-labs/stoatworks-unraid';
+
+function readmeSection(app) {
+  const hostPort = unraid.apps[app.image]?.hostPort ?? 8080;
+  const image = `${REGISTRY}/${app.image}`;
+  const variants = (app.variants || []).map(
+    (v) => `\`${REGISTRY}/${v.image}\` (${v.desc.replace(/\.\s*Runs entirely in the browser\.?$/, '')})`,
+  );
+  const note = app.note && !/_headers|build stage|no build/i.test(app.note)
+    ? `\n> **Note:** ${app.note}\n`
+    : '';
+
+  return `${README_START}
+## Run your own copy
+
+${app.title} is a static page, so hosting it yourself is one container serving
+the built files — the same files the hosted copy serves, running somewhere that
+still works when the venue has no internet.
+
+**Docker.** The image is built by this repo's \`docker.yml\` workflow on every
+push and published as \`${image}\`:
+
+\`\`\`bash
+docker run -d --name ${app.image} --restart unless-stopped -p ${hostPort}:80 ${image}:latest
+\`\`\`
+
+Or \`docker compose up -d\` with the [\`docker-compose.yml\`](docker-compose.yml)
+in this repo, which maps the same port. Either way it is then at
+\`http://localhost:${hostPort}/\`.
+${variants.length ? `\nA second image, ${variants.join(', ')}, is built from the same repo.\n` : ''}
+**Unraid.** Search Community Applications for *${app.title}* — the template is
+[\`templates/${app.image}.xml\`](${UNRAID_REPO}/blob/main/templates/${app.image}.xml)
+in [stoatworks-unraid](${UNRAID_REPO}), which is what the CA feed reads.
+
+**Stoatworks Burrow** lists it under *Self-hosted*, with the compose file a
+click away.
+${note}
+The \`Dockerfile\`, \`docker-compose.yml\`, \`docker/\` and the workflow are
+generated from \`fleet.json\` in stoatworks-unraid. Change them there and
+regenerate rather than editing them here.
+${README_END}`;
+}
+
+function updateReadme(repoDir, app) {
+  const path = join(repoDir, 'README.md');
+  if (!existsSync(path)) {
+    skipped.push(`${app.repo}: no README.md, so no "Run your own copy" section written`);
+    return;
+  }
+  const section = readmeSection(app);
+  const current = readFileSync(path, 'utf8');
+  let next;
+  const start = current.indexOf(README_START);
+  const end = current.indexOf(README_END);
+  if (start !== -1 && end !== -1 && end > start) {
+    next = current.slice(0, start) + section + current.slice(end + README_END.length);
+  } else {
+    // Insert ahead of the attributions block, else the licence heading, else
+    // at the end. A blank line either side keeps the markdown well-formed.
+    const anchors = ['<!-- attributions:start -->', '\n## Licence', '\n## License'];
+    let at = -1;
+    for (const a of anchors) {
+      const i = current.indexOf(a);
+      if (i !== -1 && (at === -1 || i < at)) at = i;
+    }
+    if (at === -1) {
+      next = current.replace(/\s*$/, '\n\n') + section + '\n';
+    } else {
+      // Back up over the newline(s) preceding the anchor so the block sits
+      // between paragraphs rather than glued to the heading.
+      const head = current.slice(0, at).replace(/\s*$/, '\n\n');
+      const tail = current.slice(at).replace(/^\s*/, '');
+      next = head + section + '\n\n' + tail;
+    }
+  }
+  if (next !== current) write(repoDir, 'README.md', next);
+}
+
+// ---------------------------------------------------------------------------
 
 function wrap(text, width, prefix) {
   const words = text.split(/\s+/);
@@ -551,6 +645,7 @@ for (const app of fleet.apps) {
       });
       write(repoDir, 'docker/nginx.conf', conf);
       write(repoDir, 'docker/stoatworks-headers.conf', headersSnippet);
+      updateReadme(repoDir, app);
     }
   }
 

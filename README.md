@@ -20,17 +20,34 @@ the public websites: a demo shows what an effect looks like and a marketing
 site is already deployed, so neither is something anyone would install.
 
 Nothing here is written by hand. Two data files describe the fleet and two
-scripts turn them into the 74 files spread across the app repos:
+scripts turn them into the 147 files spread across the app repos:
 
 ```
 fleet.json    what each app is and how it builds
 unraid.json   how each app is packaged for Unraid, and whether its repo is public
 
 scripts/gen-docker.mjs      -> Dockerfile, .dockerignore, docker-compose.yml,
-                               docker/nginx.conf, .github/workflows/docker.yml
+                               docker/nginx.conf, .github/workflows/docker.yml,
+                               and a "Run your own copy" section in each
+                               browser tool's README.md
 scripts/gen-templates.mjs   -> templates/*.xml, templates-private/*.xml
 scripts/headers-to-nginx.mjs   the _headers -> nginx translation
 ```
+
+The README section sits between `<!-- selfhost:start -->` and
+`<!-- selfhost:end -->` markers, the same arrangement as the fleet's downloads
+and attributions blocks, so a regeneration replaces exactly that section. It
+is written for the browser tools only: the services describe their own
+containers in their own words, and a generated paragraph beside that would say
+the same thing twice.
+
+One browser tool is deliberately not here. **birddog-play-patcher** is a
+static page plus a Cloudflare Worker that proxies `pkgs.tailscale.com`, which
+sends no CORS header, so the page cannot fetch the Tailscale tarball itself.
+An nginx image would serve the page and lose the proxy, and the *Add
+Tailscale* option would fail on every package. Packaging it means a small
+server that runs `src/worker.js` under Node — its own Dockerfile, with
+`hasOwnDocker` — and that has not been written.
 
 Regenerate everything:
 
@@ -40,10 +57,10 @@ node scripts/gen-docker.mjs && node scripts/gen-templates.mjs
 
 ## Installing on Unraid
 
-Public apps are in `templates/`. Once this repo is registered with Community
-Applications they are installable by search. Until then, and for anything in
-`templates-private/`, use **Docker → Add Container → Template** and paste the
-raw URL of the XML file.
+Public apps are in `templates/`, and this repository is in the Community
+Applications feed, so they are installable by search. For a template that the
+feed has not picked up yet, and for anything in `templates-private/`, use
+**Docker → Add Container → Template** and paste the raw URL of the XML file.
 
 Private-repo apps publish private GHCR packages. Run this on the server once
 before installing them:
@@ -86,11 +103,27 @@ private.
 ## Registering with Community Applications
 
 CA does not scan GitHub for template repos — the repository has to be added to
-its feed, which is a moderated submission on the Unraid forums rather than
-anything that can be done from here. Until that is done, the templates work
-fine by URL.
+its feed, a one-time submission at `ca.unraid.net/submit`. That was done on
+2026-08-06 and the feed has carried this repository since; every template
+committed to `templates/` is picked up by the next feed build without any
+further submission. Two things the feed is strict about, both found by
+templates going missing rather than by any error message: a template with
+neither `<Support>` nor `<Project>` is dropped, and category tokens are
+validated against the feed's own list. `scripts/gen-templates.mjs` refuses to
+write the first, and the tokens in use are the ones already in the feed.
+
+The feed also reads `templates-private/`. A template there points at a
+private GHCR package, so it is listed for everyone and installable by nobody
+— which is why that directory should stay empty.
 
 ## Status
+
+**In the CA feed, and every image builds.** As of 2026-09-07 the fleet is 31
+apps and 32 templates — all nineteen public browser tools bar the patcher, and
+the services — and the Community Applications feed has carried this repository
+since the 2026-08-06 submission. Twenty of the templates were listed at that
+date; the rest were either not yet committed or had no `<Support>`/`<Project>`
+element, both fixed that day, and appear at the next feed build.
 
 **Every image builds.** As of 2026-08-06 the workflow in each packaged repo is
 green on `main`, which is the only evidence any of this works: there is no

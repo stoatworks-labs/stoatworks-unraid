@@ -24,18 +24,24 @@ self-host so they still work in a venue with no internet.
 **Not** the plugin browser demos or the public websites. A demo shows what an effect looks like and
 a marketing site is already deployed, so neither is something anyone would install.
 
+One browser tool is missing on purpose: **birddog-play-patcher** needs a small server beside the
+page, to fetch the Tailscale tarball on the browser's behalf, and a plain static image would lose
+that. It will arrive when that server exists.
+
 ---
 
 ## Installing on Unraid
 
-Public apps are in `templates/`. Once this repo is registered with Community Applications they are
-installable by search.
+Public apps are in `templates/`, and this repository is in the Community Applications feed,
+so they are installable by search: open **Apps**, search for the tool's name, and install.
 
-Until then, use **Docker → Add Container → Template** and paste the raw URL of the XML file.
+If an app is not there yet — the feed rebuilds on its own irregular schedule, and a template
+added today can take a day or two to appear — use **Docker → Add Container → Template** and paste
+the raw URL of its XML file from `templates/`. That path always works.
 
-**Community Applications does not scan GitHub for template repos** — the repository has to be added
-to its feed, which is a moderated submission on the Unraid forums rather than anything that can be
-done from here. **The templates work fine by URL in the meantime.**
+**Community Applications does not scan GitHub for template repos** — a repository has to be
+submitted to its feed once, which was done for this one on 2026-08-06. After that, every template
+committed to `templates/` is picked up by the next feed build; nothing needs resubmitting.
 
 If any app ever ships from a private repo, its package is private too, and the server needs
 `docker login ghcr.io` once before installing it.

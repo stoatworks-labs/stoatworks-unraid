@@ -11,8 +11,8 @@
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
-  <Support></Support>
-  <Project></Project>
+  <Support>https://github.com/stoatworks-labs/aquilon-vpu-map/issues</Support>
+  <Project>https://github.com/stoatworks-labs/aquilon-vpu-map</Project>
   <Overview>Shows how an Analog Way LivePremier has allocated its VPU mixers across screens, layers and slices — what each screen is spending, what is left, and what a pending configuration would change. Reads only; it never writes to the switcher.
 
 Note: Reads only — it issues AWJ `get` and never writes to the switcher, so it is safe to leave running against a live rig. Bridge networking is deliberate: it discovers nothing and makes one outbound connection to the address you type, so it needs no host networking. hasOwnDocker because the repo's Dockerfile is hand-written and its CI runs the container and checks /api/health — a generated one would build for a `npm run build` and a dist/ this app does not have.</Overview>

@@ -11,8 +11,8 @@
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
-  <Support></Support>
-  <Project></Project>
+  <Support>https://github.com/stoatworks-labs/mynah/issues</Support>
+  <Project>https://github.com/stoatworks-labs/mynah</Project>
   <Overview>A lighting-desk command line for Analog Way LivePremier switchers. Self-host it on the show network: the switcher is http-only, so a https copy cannot reach one.</Overview>
   <Category>MediaApp:Video Tools:</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>

@@ -25,6 +25,13 @@
     "  404page   error_page 404 /404.html    (mirrors not_found_handling = '404-page')",
     "  none      plain 404",
     "",
+    "README section:",
+    "  gen-docker.mjs also writes a \"Run your own copy\" section into each",
+    "  static app's README.md, between <!-- selfhost:start --> and",
+    "  <!-- selfhost:end -->. It quotes the image, the host port from",
+    "  unraid.json, the CA template and Burrow. `note` is included there as",
+    "  well as in the template Overview, unless it is only about the build.",
+    "",
     "hostNetwork: true means the app discovers devices with mDNS/broadcast, which",
     "Docker's bridge network does not reliably forward. Bridge mode does not error,",
     "it just finds nothing \u2014 so this is not a preference, it is a correctness flag.",
@@ -471,6 +478,67 @@
       "title": "Will My Show Fit?",
       "category": "MediaApp:Video Tools:",
       "desc": "Describe a show \u2014 screens, canvases, layers, sources and destinations \u2014 and it works out which switchers will actually take it. Runs entirely in the browser."
+    },
+    {
+      "repo": "aquilon-pitch",
+      "image": "aquilon-pitch",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "notFound": "none",
+      "title": "Aquilon Pitch",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Pitch compensation for an Analog Way LivePremier screen spanning LED walls of different pixel pitches: the H and V ratios to type into Web RCS, the canvas each output group takes, and what the three-decimal field costs at the far edge of each wall. Runs entirely in the browser.",
+      "note": "There is no _headers file in this repo, so the image carries the default header set."
+    },
+    {
+      "repo": "negative-space",
+      "image": "negative-space",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Negative Space",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Lays out LED walls and projection surfaces with their real dimensions and gaps, and works out the composite canvas including the blank pixels between them, with slice rectangles, a Resolume advanced-output file, a guide plate, PowerPoint geometry and a PDF plan. Runs entirely in the browser."
+    },
+    {
+      "repo": "quickdaw",
+      "image": "quickdaw",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "spa",
+      "title": "QuickDaw",
+      "category": "MediaApp:Music",
+      "desc": "A multitrack recorder that runs in a browser tab: one track per interface input, streamed straight to disk as mono WAVs, with a 30-second pre-roll. Runs entirely in the browser.",
+      "note": "Recording needs the browser's audio-input and file-system-access APIs, which are only available in a secure context. Served over plain http at a LAN address there is no navigator.mediaDevices at all, so open the container at http://localhost:PORT on the machine with the audio interface, or put a TLS terminator in front of it."
+    },
+    {
+      "repo": "wallslide",
+      "image": "wallslide",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Wallslide",
+      "category": "MediaApp:Video Tools:",
+      "desc": "Generates correctly sized, themed PowerPoint and Keynote templates and test decks for an LED wall, working out the build scale the application will actually accept. Runs entirely in the browser."
+    },
+    {
+      "repo": "patchferret",
+      "image": "patchferret",
+      "kind": "static-prebuilt",
+      "serveDir": "web",
+      "headers": "web/_headers",
+      "notFound": "none",
+      "title": "PatchFerret",
+      "category": "MediaApp:Music",
+      "desc": "Turns a mixing console show file into a patch list, a specification sheet and a wiring topology diagram, as PDFs. Runs entirely in the browser.",
+      "note": "web/ is the committed browser build of the Rust crates, so there is no build stage; rebuilding it is the repo's own job (see its README), and the image serves whatever is committed."
     }
   ]
 }

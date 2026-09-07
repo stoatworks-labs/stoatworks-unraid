@@ -107,10 +107,21 @@ function configBlock({ name, target, def, mode, description, type, required = 'f
 
 function template(entry, meta) {
   const isPrivate = meta.visibility === 'private';
-  const repo = meta.repo;
+  // unraid.json names the repo only where it differs from the fleet entry
+  // (a variant, or an image published from a differently named repo). The
+  // fleet entry is the default — it was not, and six templates went out with
+  // empty <Support> and <Project>, which CA requires at least one of. Those six
+  // were exactly the ones missing from the feed on 2026-09-07 while their
+  // siblings, added the same way but with a repo in unraid.json, were listed.
+  const repo = meta.repo ?? entry.repo;
+  if (!repo) {
+    throw new Error(
+      `${entry.image}: no repo known, so the template would have neither <Support> nor <Project> — CA rejects that`,
+    );
+  }
 
-  const support = repo ? `${unraid.supportBase}/${repo}/issues` : '';
-  const project = repo ? `${unraid.supportBase}/${repo}` : '';
+  const support = `${unraid.supportBase}/${repo}/issues`;
+  const project = `${unraid.supportBase}/${repo}`;
 
   // An icon is emitted only when the file actually exists in the checkout.
   // Two ways to get this wrong, both of which render as a broken image in the

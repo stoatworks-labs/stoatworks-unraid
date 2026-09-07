@@ -11,9 +11,10 @@ Cross-cutting notes that are not specific to this repo live in
 
 `~/Projects/stoatworks-unraid` (created 2026-08-04, **public, on `main`**) is the
 single source for containerising the web fleet. `fleet.json` + `unraid.json`
-drive `scripts/gen-docker.mjs` and `scripts/gen-templates.mjs`, which write ~153
-files into 27 app repos plus 27 CA templates. **Never hand-edit the generated
-Dockerfile / compose / nginx.conf / workflow in an app repo** — regenerate.
+drive `scripts/gen-docker.mjs` and `scripts/gen-templates.mjs`, which write 147
+files into 31 app repos plus 32 CA templates (2026-09-07). **Never hand-edit the
+generated Dockerfile / compose / nginx.conf / workflow / README section in an
+app repo** — regenerate.
 
 Three fleet facts that cost time to establish and aren't obvious from any repo:
 
@@ -70,6 +71,79 @@ Serving directories are committed and prebuilt for 12 repos (`demo/`, `site/`,
 translated. See [nginx add header inheritance](https://github.com/stoatworks-labs/fleet-notes/blob/main/notes/reference_nginx_add_header_inheritance.md).
 
 Related: [observability sweep](https://github.com/stoatworks-labs/fleet-notes/blob/main/notes/project_observability_sweep.md), [website repo name](https://github.com/stoatworks-labs/fleet-notes/blob/main/notes/reference_website_repo_name.md).
+
+## 2026-09-07 — the whole browser-tool fleet, a README section, and what the CA feed had silently dropped
+
+**Five browser tools were in Burrow's Self-hosted tab with nothing to run:**
+aquilon-pitch, negative-space, quickdaw, wallslide and patchferret had no
+`fleet.json` entry, so no image, no compose file and no template. All five are
+static (`npm run build` → `dist/`, or patchferret's committed `web/`), so they
+are ordinary `static-build` / `static-prebuilt` entries on host ports
+8540–8544. wallslide and negative-space were scaffolded from aspect-calc and
+still carried a `docker/` directory whose banner said *"Generated from
+public/_headers in aspect-calc"* — the nginx config of a different app,
+committed since the first commit and never served. Regeneration overwrote it.
+
+**birddog-play-patcher is the one left out, on purpose.** Its `wrangler.toml`
+has `main = src/worker.js`: a Worker proxying `pkgs.tailscale.com`, which
+sends no CORS header, so the page cannot fetch the Tailscale tarball itself.
+An nginx image serves the page and loses the proxy, and *Add Tailscale* fails
+on every package with no visible reason. It needs a ~40-line Node server that
+runs the Worker's `fetch` handler and serves `public/`, as its own Dockerfile
+with `hasOwnDocker`. Written up in the README rather than half-done here.
+
+**Four templates were generated but never committed.** The 2026-08-2x commit
+"Four browser tools join the fleet" added openflash, willmyshowfit,
+pptx-font-manager and birddog-play-flasher to `fleet.json` and their images
+have been building since — but `gen-templates.mjs` was not run, so
+`templates/` had no XML for them and CA could not list them. Running the
+generator is the second half of adding an app, not a nicety.
+
+⚠️ **Six templates had neither `<Support>` nor `<Project>`, and CA dropped
+them without a word.** `template()` took the repo from `unraid.json`'s
+`meta.repo`, which only the entries that needed it carried; for
+aquilon-vpu-map, mynah, and the four above, `meta.repo` was undefined, so both
+elements were emitted empty. The CA starter repo says one of the two is
+required. Checked against `applicationFeed.json` (last built 2026-09-06 01:00):
+twenty stoatworks apps listed, and the missing ones were exactly these six plus
+unfuckarr. The generator now falls back to the fleet entry's repo and throws if
+it still has none. unfuckarr's own template carries both elements, so its
+absence is something else — not chased.
+
+**The feed reads `templates-private/` too.** `blackmatrix.xml` is in the feed,
+pointing at `ghcr.io/stoatworks-labs/blackmatrix`, whose package is still
+private (anonymous manifest GET → 403) although the repo went public. So it is
+listed for everyone and installable by nobody, which is the exact failure
+`unraid.json`'s comment warns about, from a direction it did not anticipate.
+The fix is on GitHub, not here: flip the package's visibility to public (the
+`org.opencontainers.image.source` label does not retro-link a package created
+before the repo was public), then set `visibility: public` and regenerate.
+Deleting a package needs a scope the local `gh` token lacks — see 2026-08-06.
+
+**Not one browser tool's README mentioned the image.** Fourteen repos had a
+Dockerfile, a compose file and a workflow that had been green for a month, and
+their READMEs said nothing about any of it. `gen-docker.mjs` now writes a
+*Run your own copy* section between `<!-- selfhost:start -->` /
+`<!-- selfhost:end -->` markers, inserted ahead of the attributions block or
+the licence heading, for static kinds only. Same marker arrangement as the
+downloads and attributions blocks, and for the same reason: a regeneration
+replaces exactly that section. It names the host port from `unraid.json`, so
+the README, the compose file and the template cannot disagree about it.
+
+**Three repos' nginx configs had drifted from their `_headers`.**
+otter-edid-editor, simpleRTA and thumbnail-generator gained `/sw.js` and
+`/manifest.webmanifest` no-cache rules in `_headers` after their last
+regeneration, so the container was serving a service worker with the wrong
+cache policy. Nothing reports this; only a regeneration shows it. Worth a
+`--check` mode, which the website's `sync-compose.py` has and this does not.
+
+**Routing generator output through worktrees.** Both generators resolve repos
+with `resolveRepo(name, override)`, and `--projects DIR` / `PROJECTS_DIR`
+makes `override` a flat directory. A scratch directory of symlinks —
+`<name> -> <repo>/.claude/worktrees/<n>` for the repos being changed, and
+`<name> -> <shared checkout>` for the rest — sends every write into a worktree
+and never touches a shared checkout, without the back-up/run/copy/restore
+dance the backend's `fleet_paths.py` scripts need.
 
 ## 2026-08-05 — the eight browser tools went public, and the generated output changed with them
 

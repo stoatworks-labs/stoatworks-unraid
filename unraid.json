@@ -172,6 +172,31 @@
     "willmyshowfit": {
       "visibility": "public",
       "hostPort": 8537
+    },
+    "aquilon-pitch": {
+      "repo": "aquilon-pitch",
+      "visibility": "public",
+      "hostPort": 8540
+    },
+    "negative-space": {
+      "repo": "negative-space",
+      "visibility": "public",
+      "hostPort": 8541
+    },
+    "quickdaw": {
+      "repo": "quickdaw",
+      "visibility": "public",
+      "hostPort": 8542
+    },
+    "wallslide": {
+      "repo": "wallslide",
+      "visibility": "public",
+      "hostPort": 8543
+    },
+    "patchferret": {
+      "repo": "patchferret",
+      "visibility": "public",
+      "hostPort": 8544
     }
   },
   "$notes": {}

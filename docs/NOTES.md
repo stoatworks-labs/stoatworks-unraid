@@ -72,6 +72,58 @@ translated. See [nginx add header inheritance](https://github.com/stoatworks-lab
 
 Related: [observability sweep](https://github.com/stoatworks-labs/fleet-notes/blob/main/notes/project_observability_sweep.md), [website repo name](https://github.com/stoatworks-labs/fleet-notes/blob/main/notes/reference_website_repo_name.md).
 
+## 2026-09-07 (later) — every browser tool gets a desktop tray app, from a third generator
+
+**`gen-launcher.mjs` writes `launcher/` and `release-desktop.yml` into each
+static app's repo.** Burrow wants the browser tools installable as standalone
+tray apps, and av-launcher gained a `[serve] mode = "static"` today for
+exactly that — the shell serves a bundled directory in-process, so there is no
+helper binary for macOS to quarantine (av-launcher AGENTS §5). The generator
+copies the shell file for file from the av-launcher checkout (`src/`,
+`src-tauri/src`, `src-tauri/crates/diag`, `Cargo.toml`, `Cargo.lock`,
+`release-lib.sh`) and generates the per-app parts from the same fleet entry
+the Dockerfile comes from: `launcher.toml` (`dir = "{resource}/site"`,
+`not_found` from `notFound`, `default_port` from `unraid.json`),
+`tauri.conf.json` (`site/**/*` as a bundle resource), `Info.plist`, icons,
+`prepare.sh` (build or take the served directory, stage it as
+`src-tauri/site/`) and the workflow.
+
+**Proven end to end on this Mac, not on a clean one.** aspect-calc's launcher
+built locally (`tauri build --bundles app`, 14 MB, `Aspect Calc.app`), the
+bundle's `Info.plist` carried the identifier, version and the local-network
+string, and with Start pressed the app served the bundled site on 8520 on
+127.0.0.1 and on the LAN address with the site's own CSP and cache headers,
+refused `/_headers`, `/../` and `%2e%2e/`, and closed the port on quit. What
+that does not prove is Gatekeeper on a downloaded copy — that needs a
+release, the auto-signer's pass, and a Mac that has never seen the app.
+
+⚠️ **Tauri refuses unknown keys in `tauri.conf.json`.** A `_generated`
+provenance key, harmless anywhere else, fails the build with "Additional
+properties are not allowed". The README beside it carries the banner instead.
+
+⚠️ **Nothing here can be clicked from the background.** The panel is a
+WKWebView; `app_click` delivers raw input the button never sees, and the AX
+walk the tool does is truncated before it reaches the web area. System Events
+sees it fine: iterate `entire contents of window 1`, filter `class of e is
+button`, click the one named "Start server". Worth knowing before the next
+launcher test costs half an hour.
+
+**Two things the panel shows that are av-launcher's, not this generator's.**
+"All interfaces" displays the *first* non-loopback IPv4, which on this Mac is
+the Tailscale address (`10.147.17.93`) rather than the LAN one, so the URL in
+the panel is right but not the one you would read out to someone in the room.
+And the diag log records the shell's Cargo version (0.2.1), not the app's.
+Neither blocks anything; both belong in av-launcher.
+
+**Not done, in order:** tag one tool (`v0.1.0` on aspect-calc) and watch
+`release-desktop.yml` and the auto-signer; open the *downloaded* `.dmg` on a
+clean Mac; register the identifiers (`com.allansargeant.<image>`) in the
+website's `bundle-ids.json`; then teach the catalogue route to emit `app`
+assets for a `web` entry that has a `.dmg`, and drop Burrow's
+`kind !== 'web'` Formats gate. A Windows program-folder zip (what Burrow
+places on Windows; the NSIS installer is for people) is also still to add to
+the workflow.
+
 ## 2026-09-07 — the whole browser-tool fleet, a README section, and what the CA feed had silently dropped
 
 **Five browser tools were in Burrow's Self-hosted tab with nothing to run:**

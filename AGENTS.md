@@ -31,12 +31,19 @@ node scripts/gen-docker.mjs && node scripts/gen-templates.mjs
   `gen-docker.mjs` too — static kinds only. Edit `readmeSection()` there, not
   the READMEs.
 
-## Adding an app is two generators, not one
+## Adding an app is three generators, not one
 
 `gen-docker.mjs` gives the repo its image; `gen-templates.mjs` gives CA its
-template. Four apps sat for weeks with green image builds and no template
-because only the first was run. Run both, then check `git status` here —
-an app is not in CA until its XML is committed.
+template; `gen-launcher.mjs` gives a static app its desktop tray app and
+release workflow. Four apps sat for weeks with green image builds and no
+template because only the first was run. Run all three, then check
+`git status` here — an app is not in CA until its XML is committed.
+
+`gen-launcher.mjs` copies the av-launcher shell from its checkout, so the
+result depends on which commit that checkout is at; each launcher's README
+records it. Keep av-launcher on `main` before regenerating, and regenerate
+every launcher when the shell changes rather than patching one. Icons are
+only written when missing (`tauri icon` is slow); `--icons` redoes them.
 
 **Generator output can go straight into worktrees.** `--projects DIR` (or
 `PROJECTS_DIR` for the template generator) points `resolveRepo` at a flat

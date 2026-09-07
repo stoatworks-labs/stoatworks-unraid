@@ -339,6 +339,12 @@ function dockerignore(app) {
     if (app.variants) for (const v of app.variants) lines.push(`/${v.outDir}`);
     lines.push('/out');
   }
+  if (app.kind.startsWith('static')) {
+    lines.push('');
+    lines.push('# The desktop tray app (gen-launcher.mjs). Its Rust target dir alone would');
+    lines.push('# be gigabytes, and none of it is served.');
+    lines.push('/launcher');
+  }
   if (app.kind === 'rust-service') {
     lines.push('/target');
     if (app.webBuild) lines.push(`/${app.webBuild.outDir}`);

@@ -31,8 +31,45 @@ scripts/gen-docker.mjs      -> Dockerfile, .dockerignore, docker-compose.yml,
                                and a "Run your own copy" section in each
                                browser tool's README.md
 scripts/gen-templates.mjs   -> templates/*.xml, templates-private/*.xml
+scripts/gen-launcher.mjs    -> launcher/ (a desktop tray app serving the site)
+                               and .github/workflows/release-desktop.yml, for
+                               every browser tool
 scripts/headers-to-nginx.mjs   the _headers -> nginx translation
 ```
+
+Regenerate everything:
+
+```bash
+node scripts/gen-docker.mjs && node scripts/gen-templates.mjs && node scripts/gen-launcher.mjs
+```
+
+## The tray apps
+
+A browser tool is also worth having as a thing you double-click: a menu-bar
+app that serves the same built site on a chosen interface and port, for the
+venue with no internet and no server. `gen-launcher.mjs` writes one into each
+static app's `launcher/`, on the fleet's
+[av-launcher](https://github.com/stoatworks-labs/av-launcher) shell using its
+`[serve] mode = "static"` — the site is bundled as a resource and served from
+inside the app, so nothing is spawned beside it and there is no helper binary
+for macOS to quarantine. The site's `_headers` ships with it and is honoured.
+
+The shell (`src/`, `src-tauri/src/`, `src-tauri/crates/`) is copied file for
+file from the av-launcher checkout, and the commit it came from is recorded in
+each launcher's README; regenerating refreshes all of them at once. What
+differs per app — `launcher.toml`, `tauri.conf.json`, `Info.plist`, the icons,
+`scripts/prepare.sh` and the workflow — is generated from the same
+`fleet.json` entry the Dockerfile comes from, so the container and the app
+cannot serve different directories or default to different ports.
+
+`release-desktop.yml` builds macOS (arm64 and x86_64), Windows and Linux
+installers when a `v*` tag is pushed, stamps the tag's version into the
+bundle, and attaches them to the release. The macOS bundles leave CI ad-hoc
+signed; the fleet's auto-sign watcher re-signs, notarises and re-uploads them.
+
+Icons are rendered by `tauri icon` from the repo's own `public/icon-512.png`
+(or `apple-touch-icon.png`), falling back to the Stoatworks mark, and only
+when missing — pass `--icons` to redo them.
 
 The README section sits between `<!-- selfhost:start -->` and
 `<!-- selfhost:end -->` markers, the same arrangement as the fleet's downloads
@@ -48,12 +85,6 @@ An nginx image would serve the page and lose the proxy, and the *Add
 Tailscale* option would fail on every package. Packaging it means a small
 server that runs `src/worker.js` under Node — its own Dockerfile, with
 `hasOwnDocker` — and that has not been written.
-
-Regenerate everything:
-
-```bash
-node scripts/gen-docker.mjs && node scripts/gen-templates.mjs
-```
 
 ## Installing on Unraid
 

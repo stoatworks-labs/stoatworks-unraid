@@ -214,6 +214,18 @@
       "desc": "Projector edge-blend calculator with Resolume export. Runs entirely in the browser."
     },
     {
+      "repo": "line-calc",
+      "image": "line-calc",
+      "kind": "static-build",
+      "buildCmd": "npm run build",
+      "outDir": "dist",
+      "headers": "public/_headers",
+      "notFound": "none",
+      "title": "Line Calc",
+      "category": "Tools:Utilities",
+      "desc": "How many LED panels fit on one processor port, and how many on one power circuit. Runs entirely in the browser."
+    },
+    {
       "repo": "caspar-av",
       "image": "caspar-av",
       "kind": "rust-service",

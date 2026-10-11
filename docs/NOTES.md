@@ -16,6 +16,15 @@ files into 31 app repos plus 32 CA templates (2026-09-07). **Never hand-edit the
 generated Dockerfile / compose / nginx.conf / workflow / README section in an
 app repo** — regenerate.
 
+**2026-10-11: three apps left the fleet.** line-calc merged into pixel-peeker (its Line calc
+view is in the pixel-peeker image) and pmse-to-wwb was superseded by RFutils; both repos are
+archived, so their entries, templates and CA listings are gone. weblinked-docker's packaging
+moved into weblinked: the entry is now `repo`/`image` `weblinked`, the template is
+`weblinked/unraid/weblinked.xml` (`ghcr.io/stoatworks-labs/weblinked:edge`), and the old
+`weblinked-docker` image name is frozen at its 22 August 2026 build. Generated with
+`PROJECTS_DIR` pointed at a flat dir of links to every checkout, so icons resolve and the one
+unpushed template was read from its worktree.
+
 Three fleet facts that cost time to establish and aren't obvious from any repo:
 
 - **`atem-scopes` builds its web app with `static:build`, not `build`** — plain

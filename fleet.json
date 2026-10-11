@@ -214,18 +214,6 @@
       "desc": "Projector edge-blend calculator with Resolume export. Runs entirely in the browser."
     },
     {
-      "repo": "line-calc",
-      "image": "line-calc",
-      "kind": "static-build",
-      "buildCmd": "npm run build",
-      "outDir": "dist",
-      "headers": "public/_headers",
-      "notFound": "none",
-      "title": "Line Calc",
-      "category": "Tools:Utilities",
-      "desc": "How many LED panels fit on one processor port, and how many on one power circuit. Runs entirely in the browser."
-    },
-    {
       "repo": "caspar-av",
       "image": "caspar-av",
       "kind": "rust-service",
@@ -336,18 +324,6 @@
           "desc": "Pixel Peeker without the NovaStar export path. Runs entirely in the browser."
         }
       ]
-    },
-    {
-      "repo": "pmse-to-wwb",
-      "image": "pmse-to-wwb",
-      "kind": "python-service",
-      "port": 8000,
-      "hostNetwork": false,
-      "title": "PMSE to WWB",
-      "category": "Tools:Utilities",
-      "desc": "Turns an Ofcom PMSE licence schedule PDF into Shure Wireless Workbench import files. The PDF is parsed on the server and is not stored.",
-      "hasOwnDocker": true,
-      "note": "This was a static-prebuilt image serving site/ until 2026-08-05, and that was wrong: site/ is a four-file LANDING page pointing at RFutils, not the app. The app is backend/ (FastAPI, uvicorn on 8000) plus frontend/, and the repo's own Dockerfile has always built it. Generating over that replaced a working converter with a signpost. hasOwnDocker now leaves the Dockerfile and compose alone, and the kind exists only so the template reads port 8000 rather than the 80 a static kind forces \u2014 nothing generates a Python image, and nothing needs to."
     },
     {
       "repo": "pptx-font-manager",
@@ -476,8 +452,8 @@
       "note": "All three hasOwn* flags are set and each is load-bearing. hasOwnDocker: the image is a Python service with ffmpeg and a PUID/PGID entrypoint, which no generated kind produces. hasOwnWorkflow: the repo's CI runs a 78-test suite, builds multi-arch on tags, boots the image and asserts /health, and cuts the GitHub release \u2014 a generated docker.yml alongside it would race it to the same tags. hasOwnTemplate: the template needs fifteen Config blocks (media and downloads paths, PUID/PGID/UMASK/TZ, six env seeds, a /dev/dri device) that this generator cannot express; re-expressing them here would split the descriptions from the app they describe."
     },
     {
-      "repo": "weblinked-docker",
-      "image": "weblinked-docker",
+      "repo": "weblinked",
+      "image": "weblinked",
       "kind": "cpp-service",
       "port": 7654,
       "hostNetwork": true,
@@ -487,7 +463,7 @@
       "hasOwnDocker": true,
       "hasOwnWorkflow": true,
       "hasOwnTemplate": true,
-      "note": "Packaging only \u2014 this repo holds no source. Its Dockerfile clones stoatworks-labs/weblinked at build time. All three hasOwn* flags are load-bearing. hasOwnDocker: a multi-stage build that fetches a pinned 315 MB CEF distribution and compiles C++, which no generated kind produces. hasOwnWorkflow: the build takes ~20 minutes and is amd64-only on purpose (arm64 would be QEMU-emulated for a full Chromium-wrapper compile), and its smoke test boots the image and asserts the headless render path is alive \u2014 a generated docker.yml would race it to the same tags. hasOwnTemplate: eleven Config blocks, and the NDI runtime mount needs an explanation the generator cannot carry. NOTE the libndi rule: it is dlopen'd and its licence forbids the modification and reverse engineering MIT cannot forbid, so it is NEVER baked into the image \u2014 the template mounts it at /opt/ndi/lib from a directory the user supplies."
+      "note": "The packaging moved into stoatworks-labs/weblinked on 2026-10-11 (docker/, its own docker.yml publishing ghcr.io/stoatworks-labs/weblinked, and unraid/weblinked.xml). All three hasOwn* flags stay load-bearing: a multi-stage build that fetches a pinned CEF distribution and compiles C++, a workflow that runs the smoke test, and a template that needs host networking and a mounted NDI runtime. The old weblinked-docker repo is archived and its image name is frozen at the 22 August 2026 build."
     },
     {
       "repo": "willmyshowfit",

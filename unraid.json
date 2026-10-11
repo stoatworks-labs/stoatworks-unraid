@@ -120,11 +120,6 @@
       "visibility": "public",
       "hostPort": 8527
     },
-    "pmse-to-wwb": {
-      "repo": "pmse-to-wwb",
-      "visibility": "public",
-      "hostPort": 8507
-    },
     "pptx-font-manager": {
       "visibility": "public",
       "hostPort": 8538
@@ -164,11 +159,6 @@
       "visibility": "public",
       "hostPort": 6969
     },
-    "weblinked-docker": {
-      "repo": "weblinked-docker",
-      "visibility": "public",
-      "hostPort": null
-    },
     "willmyshowfit": {
       "visibility": "public",
       "hostPort": 8537
@@ -197,6 +187,11 @@
       "repo": "patchferret",
       "visibility": "public",
       "hostPort": 8544
+    },
+    "weblinked": {
+      "repo": "weblinked",
+      "visibility": "public",
+      "hostPort": null
     }
   },
   "$notes": {}

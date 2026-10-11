@@ -11,14 +11,14 @@
 -->
 <Container version="2">
   <Name>weblinked</Name>
-  <Repository>ghcr.io/stoatworks-labs/weblinked-docker:edge</Repository>
-  <Registry>https://ghcr.io/stoatworks-labs/weblinked-docker</Registry>
+  <Repository>ghcr.io/stoatworks-labs/weblinked:edge</Repository>
+  <Registry>https://ghcr.io/stoatworks-labs/weblinked</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
-  <Support>https://github.com/stoatworks-labs/weblinked-docker/issues</Support>
-  <Project>https://github.com/stoatworks-labs/weblinked-docker</Project>
+  <Support>https://github.com/stoatworks-labs/weblinked/issues</Support>
+  <Project>https://github.com/stoatworks-labs/weblinked</Project>
   <Overview>Renders a web page offscreen at a broadcast raster and exact frame rate and sends it out as NDI. Point it at a Grafana dashboard, a scoreboard, a lower third or a countdown clock and it becomes a video source your vision mixer, decoder or recorder can take.
 
 Chromium renders on the CPU through SwiftShader, so no GPU passthrough is needed. Measured at 50.1 ticks/sec at 1080p50 with zero dropped frames.
@@ -34,7 +34,7 @@ The control page is at the WebUI link and is the whole interface — it also acc
 SECURITY: intended to run purely inside a private network or Tailscale tailnet. The control API has no authentication until you set an API token, and POST /api/script runs arbitrary JavaScript in the rendered page — so an open port here is remote code execution in a browser on your network, not just a feed a stranger can retune. Its security has not been independently reviewed by a human. Host networking puts the control port on every interface this server has, so set the bind address to your tailnet address, set an API token, and never expose it to the public internet.</Overview>
   <Category>MediaApp:Video Tools:</Category>
   <WebUI>http://[IP]:7654/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/weblinked-docker.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/templates/weblinked.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/stoatworks-labs/stoatworks-unraid/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>

@@ -25,8 +25,8 @@ they still work in a venue with no internet.
 a marketing site is already deployed, so neither is something anyone would install.
 
 One browser tool is missing on purpose: **birddog-play-patcher** needs a small server beside the
-page, to fetch the Tailscale tarball on the browser's behalf, and a plain static image would lose
-that. It'll turn up when that server exists.
+page, to fetch the Tailscale and MediaMTX tarballs on the browser's behalf, and a plain static
+image would lose that. It'll turn up when that server exists.
 
 ---
 
@@ -85,13 +85,16 @@ Flipping the repo afterwards doesn't retrospectively publish a package that was 
 
 ## Nothing here is written by hand
 
-Two data files describe the fleet, and two scripts turn them into the 74 files spread across the
-app repos:
+Two data files describe the fleet:
 
 ```
 fleet.json    what each app is and how it builds
 unraid.json   how each app is packaged, and whether its repo is public
 ```
+
+Three scripts turn them into the templates in this repository and 745 files across 28 app repos
+(counted on 2026-10-12): the container files, a section in each browser tool's README, and each
+browser tool's desktop tray app, not counting its icons.
 
 **The generators are deterministic and their output is committed**, so you can review every
 generated file in the app repos' own history rather than it being produced at build time.

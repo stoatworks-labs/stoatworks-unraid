@@ -19,23 +19,29 @@ no internet. It's *not* the plugin browser demos or the public websites, on
 purpose: a demo shows what an effect looks like and a marketing site is already
 deployed, so neither is something anyone would install.
 
-Nothing here is written by hand. Two data files describe the fleet and two
-scripts turn them into the 147 files spread across the app repos:
+Nothing here is written by hand. Two data files describe the fleet and three
+scripts turn them into the templates here and the files spread across the app
+repos:
 
 ```
 fleet.json    what each app is and how it builds
 unraid.json   how each app is packaged for Unraid, and whether its repo is public
 
 scripts/gen-docker.mjs      -> Dockerfile, .dockerignore, docker-compose.yml,
-                               docker/nginx.conf, .github/workflows/docker.yml,
-                               and a "Run your own copy" section in each
-                               browser tool's README.md
+                               docker/nginx.conf, docker/stoatworks-headers.conf,
+                               .github/workflows/docker.yml, and a "Run your
+                               own copy" section in each browser tool's README.md
 scripts/gen-templates.mjs   -> templates/*.xml, templates-private/*.xml
 scripts/gen-launcher.mjs    -> launcher/ (a desktop tray app serving the site)
                                and .github/workflows/release-desktop.yml, for
                                every browser tool
 scripts/headers-to-nginx.mjs   the _headers -> nginx translation
 ```
+
+Between them they write or update 745 files across 28 app repos (counted on
+2026-10-12): 165 from `gen-docker.mjs` (145 container files, plus the README of
+each of the 20 browser tools) and 580 from `gen-launcher.mjs` (29 per browser
+tool), not counting the icons it renders for a tray app that hasn't got any.
 
 Regenerate everything:
 
@@ -79,12 +85,12 @@ containers in their own words, and a generated paragraph beside that would say
 the same thing twice.
 
 One browser tool is left out on purpose. **birddog-play-patcher** is a static
-page plus a Cloudflare Worker that proxies `pkgs.tailscale.com`, which doesn't
-send a CORS header, so the page can't fetch the Tailscale tarball itself. An
-nginx image would serve the page and lose the proxy, and the *Add Tailscale*
-option would fail on every package. Packaging it means a small server that runs
-`src/worker.js` under Node (its own Dockerfile, with `hasOwnDocker`), and that
-hasn't been written yet.
+page plus a Cloudflare Worker that proxies `pkgs.tailscale.com` and GitHub's
+MediaMTX release downloads, neither of which sends a CORS header, so the page
+can't fetch either tarball itself. An nginx image would serve the page and lose
+the proxy, and every package with Tailscale or the streaming gateway in it would
+fail. Packaging it means a small server that runs `src/worker.js` under Node
+(its own Dockerfile, with `hasOwnDocker`), and that hasn't been written yet.
 
 ## Installing on Unraid
 

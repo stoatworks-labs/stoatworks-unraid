@@ -2,22 +2,22 @@
 
 > **AI-assisted project.** This codebase was created with [Claude Code](https://claude.com/claude-code)
 > (Anthropic), directed and reviewed by a human author. The generators are deterministic and their
-> output is committed, so every generated file is reviewable in the app repos' history rather than
-> produced at build time. Each image is built by GitHub Actions on every push, which is the only
-> evidence any of this works: the machine these files were written on has **no container runtime and
-> no nginx**, so nothing here has ever been built, started or requested locally. A green CI run proves
-> an image *builds*; it does not prove the app inside it serves correctly, and no container has been
-> installed on a real Unraid server from these templates.
+> output is committed, so you can review every generated file in the app repos' history rather than
+> it appearing at build time. GitHub Actions builds each image on every push, and that's the only
+> evidence any of this works: the machine I wrote these files on has **no container runtime and
+> no nginx**, so nothing here has ever been built, started or requested locally. A green CI run
+> proves an image *builds*. It doesn't prove the app inside it serves correctly, and no container
+> has been installed on a real Unraid server from these templates.
 
 Container packaging for the Stoatworks web fleet: Dockerfiles and compose files
 for each app, and Unraid Community Applications templates that install them.
 
-**Scope: the things worth running on your own server.** That is the always-on
-services — ATEM Overseer, RFutils, caspar-AV, srt-router, flock — and the
-browser tools, which are static pages you would self-host so they still work in
-a venue with no internet. It is deliberately *not* the plugin browser demos or
-the public websites: a demo shows what an effect looks like and a marketing
-site is already deployed, so neither is something anyone would install.
+**Scope: the things worth running on your own server.** That means the always-on
+services (ATEM Overseer, RFutils, caspar-AV, srt-router, flock) and the browser
+tools, which are static pages you'd self-host so they still work in a venue with
+no internet. It's *not* the plugin browser demos or the public websites, on
+purpose: a demo shows what an effect looks like and a marketing site is already
+deployed, so neither is something anyone would install.
 
 Nothing here is written by hand. Two data files describe the fleet and two
 scripts turn them into the 147 files spread across the app repos:
@@ -50,17 +50,17 @@ app that serves the same built site on a chosen interface and port, for the
 venue with no internet and no server. `gen-launcher.mjs` writes one into each
 static app's `launcher/`, on the fleet's
 [av-launcher](https://github.com/stoatworks-labs/av-launcher) shell using its
-`[serve] mode = "static"` — the site is bundled as a resource and served from
-inside the app, so nothing is spawned beside it and there is no helper binary
+`[serve] mode = "static"`. The site is bundled as a resource and served from
+inside the app, so nothing is spawned beside it and there's no helper binary
 for macOS to quarantine. The site's `_headers` ships with it and is honoured.
 
 The shell (`src/`, `src-tauri/src/`, `src-tauri/crates/`) is copied file for
 file from the av-launcher checkout, and the commit it came from is recorded in
 each launcher's README; regenerating refreshes all of them at once. What
-differs per app — `launcher.toml`, `tauri.conf.json`, `Info.plist`, the icons,
-`scripts/prepare.sh` and the workflow — is generated from the same
+differs per app (`launcher.toml`, `tauri.conf.json`, `Info.plist`, the icons,
+`scripts/prepare.sh` and the workflow) is generated from the same
 `fleet.json` entry the Dockerfile comes from, so the container and the app
-cannot serve different directories or default to different ports.
+can't serve different directories or default to different ports.
 
 `release-desktop.yml` builds macOS (arm64 and x86_64), Windows and Linux
 installers when a `v*` tag is pushed, stamps the tag's version into the
@@ -69,28 +69,28 @@ signed; the fleet's auto-sign watcher re-signs, notarises and re-uploads them.
 
 Icons are rendered by `tauri icon` from the repo's own `public/icon-512.png`
 (or `apple-touch-icon.png`), falling back to the Stoatworks mark, and only
-when missing — pass `--icons` to redo them.
+when they're missing; pass `--icons` to redo them.
 
 The README section sits between `<!-- selfhost:start -->` and
 `<!-- selfhost:end -->` markers, the same arrangement as the fleet's downloads
-and attributions blocks, so a regeneration replaces exactly that section. It
-is written for the browser tools only: the services describe their own
+and attributions blocks, so a regeneration replaces that section and nothing
+else. It's written for the browser tools only: the services describe their own
 containers in their own words, and a generated paragraph beside that would say
 the same thing twice.
 
-One browser tool is deliberately not here. **birddog-play-patcher** is a
-static page plus a Cloudflare Worker that proxies `pkgs.tailscale.com`, which
-sends no CORS header, so the page cannot fetch the Tailscale tarball itself.
-An nginx image would serve the page and lose the proxy, and the *Add
-Tailscale* option would fail on every package. Packaging it means a small
-server that runs `src/worker.js` under Node — its own Dockerfile, with
-`hasOwnDocker` — and that has not been written.
+One browser tool is left out on purpose. **birddog-play-patcher** is a static
+page plus a Cloudflare Worker that proxies `pkgs.tailscale.com`, which doesn't
+send a CORS header, so the page can't fetch the Tailscale tarball itself. An
+nginx image would serve the page and lose the proxy, and the *Add Tailscale*
+option would fail on every package. Packaging it means a small server that runs
+`src/worker.js` under Node (its own Dockerfile, with `hasOwnDocker`), and that
+hasn't been written yet.
 
 ## Installing on Unraid
 
 Public apps are in `templates/`, and this repository is in the Community
-Applications feed, so they are installable by search. For a template that the
-feed has not picked up yet, and for anything in `templates-private/`, use
+Applications feed, so you can install them by searching. For a template the
+feed hasn't picked up yet, and for anything in `templates-private/`, use
 **Docker → Add Container → Template** and paste the raw URL of the XML file.
 
 Private-repo apps publish private GHCR packages. Run this on the server once
@@ -104,72 +104,72 @@ docker login ghcr.io
 
 **Host networking is a correctness flag, not a preference.** `atem-overseer`,
 `RFutils`, `srt-router` and `flock` discover devices over mDNS and broadcast.
-Docker's bridge network does not reliably forward multicast, and the failure
-mode is not an error — discovery simply returns nothing, which reads as "there
+Docker's bridge network doesn't reliably forward multicast, and when it fails
+you don't get an error. Discovery just returns nothing, which reads as "there
 are no devices on this network". Those templates ship `Network=host`. You can
-switch them to bridge if you would rather add devices by IP.
+switch them to bridge if you'd rather add devices by IP.
 
 **`_headers` is the source of truth for headers, not `docker/nginx.conf`.**
 Every static app carries a Cloudflare `_headers` file that the hosted build
-uses. nginx cannot read it, so `gen-docker.mjs` translates it. Edit `_headers`
+uses. nginx can't read it, so `gen-docker.mjs` translates it. Edit `_headers`
 and regenerate; a change made directly to `nginx.conf` is overwritten.
 
-The translation is not a copy. nginx's `add_header` does not inherit into a
-`location` that sets any header of its own — the child list replaces the parent
-list rather than merging — so a `/assets/*` block setting only `Cache-Control`
-would silently drop every security header for exactly the files that carry the
-application's JavaScript. The base headers therefore live in a snippet that
-every generated location `include`s explicitly, and everything is emitted with
+The translation isn't a straight copy. nginx's `add_header` doesn't inherit into
+a `location` that sets any header of its own (the child list replaces the parent
+list rather than merging), so a `/assets/*` block setting only `Cache-Control`
+would silently drop every security header for precisely the files that carry the
+application's JavaScript. So the base headers live in a snippet that every
+generated location `include`s explicitly, and everything is emitted with
 `always` so the headers survive 304s.
 
-**GHCR package visibility follows the repo, and it is decided on first
-publish.** Every repo packaged here is public, so `templates-private/` is empty
-— but the machinery stays, because a public template pointing at a private
+**GHCR package visibility follows the repo, and it's decided on first
+publish.** Every repo packaged here is public, so `templates-private/` is empty,
+but the machinery stays, because a public template pointing at a private
 package produces a pull error for every user who clicks Install, and that reads
 as a broken template rather than a permissions one. If an app ever starts life
 private, make its repo public *before* its first workflow run: flipping the
-repo afterwards does not retrospectively publish a package that was created
+repo afterwards doesn't retrospectively publish a package that was created
 private.
 
 ## Registering with Community Applications
 
-CA does not scan GitHub for template repos — the repository has to be added to
+CA doesn't scan GitHub for template repos. The repository has to be added to
 its feed, a one-time submission at `ca.unraid.net/submit`. That was done on
 2026-08-06 and the feed has carried this repository since; every template
-committed to `templates/` is picked up by the next feed build without any
-further submission. Two things the feed is strict about, both found by
-templates going missing rather than by any error message: a template with
+committed to `templates/` gets picked up by the next feed build with no further
+submission. The feed is strict about two things, both found by templates
+going missing rather than from any error message: a template with
 neither `<Support>` nor `<Project>` is dropped, and category tokens are
 validated against the feed's own list. `scripts/gen-templates.mjs` refuses to
 write the first, and the tokens in use are the ones already in the feed.
 
 The feed also reads `templates-private/`. A template there points at a
-private GHCR package, so it is listed for everyone and installable by nobody
-— which is why that directory should stay empty.
+private GHCR package, so it's listed for everyone and installable by nobody,
+which is why that directory should stay empty.
 
 ## Status
 
 **In the CA feed, and every image builds.** As of 2026-09-07 the fleet is 31
-apps and 32 templates — all nineteen public browser tools bar the patcher, and
-the services — and the Community Applications feed has carried this repository
+apps and 32 templates (all nineteen public browser tools bar the patcher, plus
+the services), and the Community Applications feed has carried this repository
 since the 2026-08-06 submission. Twenty of the templates were listed at that
-date; the rest were either not yet committed or had no `<Support>`/`<Project>`
+date. The rest were either not committed yet or had no `<Support>`/`<Project>`
 element, both fixed that day, and appear at the next feed build.
 
 **Every image builds.** As of 2026-08-06 the workflow in each packaged repo is
-green on `main`, which is the only evidence any of this works: there is no
-container runtime on the machine these files were authored on, so every
-Dockerfile here is derived from reading each repo's build configuration rather
-than from a successful local build. A green run proves an image *builds*. It
-does not prove the app inside serves correctly, and **no container has yet been
-installed on a real Unraid server from these templates**.
+green on `main`, which is the only evidence any of this works: there's no
+container runtime on the machine I wrote these files on, so every Dockerfile
+here comes from reading each repo's build configuration rather than from a
+successful local build. A green run proves an image *builds*. It doesn't prove
+the app inside serves correctly, and **no container has yet been installed on a
+real Unraid server from these templates**.
 
-That first CI run was worth having. It found two things nothing else would
+That first CI run earned its keep. It found two things nothing else would
 have: a `react-dom` major bump in caspar-AV's console that had landed without
-`react` moving with it, so a clean `npm ci` could not resolve the tree at all;
-and a `pmse-to-wwb` image that served the repo's `site/` directory, which turns
-out to be a landing page pointing elsewhere rather than the app. A container
-build is the first clean-room install a repo ever gets.
+`react` moving with it, so a clean `npm ci` couldn't resolve the tree at all,
+and a `pmse-to-wwb` image that served the repo's `site/` directory, which turned
+out to be a landing page pointing somewhere else rather than the app. A
+container build is the first clean-room install a repo ever gets.
 
 The static images do at least check their own nginx config: the build runs
 `nginx -t`, so a malformed generated config fails the build instead of

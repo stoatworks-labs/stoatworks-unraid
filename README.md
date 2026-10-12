@@ -68,7 +68,7 @@ differs per app (`launcher.toml`, `tauri.conf.json`, `Info.plist`, the icons,
 `fleet.json` entry the Dockerfile comes from, so the container and the app
 can't serve different directories or default to different ports.
 
-`release-desktop.yml` builds macOS (arm64 and x86_64), Windows and Linux
+`release-desktop.yml` builds macOS (one universal installer), Windows and Linux
 installers when a `v*` tag is pushed, stamps the tag's version into the
 bundle, and attaches them to the release. The macOS bundles leave CI ad-hoc
 signed; the fleet's auto-sign watcher re-signs, notarises and re-uploads them.
@@ -129,10 +129,12 @@ generated location `include`s explicitly, and everything is emitted with
 `always` so the headers survive 304s.
 
 **GHCR package visibility follows the repo, and it's decided on first
-publish.** Every repo packaged here is public, so `templates-private/` is empty,
-but the machinery stays, because a public template pointing at a private
-package produces a pull error for every user who clicks Install, and that reads
-as a broken template rather than a permissions one. If an app ever starts life
+publish.** Every repo packaged here is public, but BlackMatrix's package was
+created while its repo was private and still is (an anonymous pull gets a 403),
+so its template is still in `templates-private/`. The machinery stays, because
+a public template pointing at a private package produces a pull error for every
+user who clicks Install, and that reads as a broken template rather than a
+permissions one. If an app ever starts life
 private, make its repo public *before* its first workflow run: flipping the
 repo afterwards doesn't retrospectively publish a package that was created
 private.
@@ -155,12 +157,15 @@ which is why that directory should stay empty.
 
 ## Status
 
-**In the CA feed, and every image builds.** As of 2026-09-07 the fleet is 31
-apps and 32 templates (all nineteen public browser tools bar the patcher, plus
-the services), and the Community Applications feed has carried this repository
-since the 2026-08-06 submission. Twenty of the templates were listed at that
-date. The rest were either not committed yet or had no `<Support>`/`<Project>`
-element, both fixed that day, and appear at the next feed build.
+**In the CA feed, and every image builds.** As of 2026-10-12 the fleet is 30
+apps and 31 templates (20 browser tools and 10 services), and the Community
+Applications feed has carried this repository since the 2026-08-06 submission.
+That's every public browser tool from before 2026-09-07 bar the patcher;
+deadair, openfont-manager, canary-flasher and cosplay came later and aren't in
+the fleet. On 2026-09-07, when the fleet was 31 apps and 32 templates, twenty
+of the templates were listed. The rest were either not committed yet or had no
+`<Support>`/`<Project>` element, both fixed that day, and appear at the next
+feed build.
 
 **Every image builds.** As of 2026-08-06 the workflow in each packaged repo is
 green on `main`, which is the only evidence any of this works: there's no

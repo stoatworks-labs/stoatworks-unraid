@@ -105,8 +105,8 @@
       "visibility": "public",
       "hostPort": 8536
     },
-    "otter-edid-editor": {
-      "repo": "otter-edid-editor",
+    "edid-editor": {
+      "repo": "edid-editor",
       "visibility": "public",
       "hostPort": 8529
     },

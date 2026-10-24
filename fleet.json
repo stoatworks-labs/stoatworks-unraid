@@ -293,14 +293,14 @@
       "note": "WebUSB needs a secure context. Served over plain http at a LAN address there is no navigator.usb at all, so the container cannot reach a device \u2014 open it at http://localhost:PORT on the machine holding the USB cable, or put a TLS terminator in front of it. This fails silently rather than loudly: the page loads and simply offers no device. Without WebUSB the page is still a correct, ordered, device-specific adb and fastboot command list, which is most of its value."
     },
     {
-      "repo": "otter-edid-editor",
-      "image": "otter-edid-editor",
+      "repo": "edid-editor",
+      "image": "edid-editor",
       "kind": "static-build",
       "buildCmd": "npm run build",
       "outDir": "dist",
       "headers": "public/_headers",
       "notFound": "none",
-      "title": "Otter EDID Editor",
+      "title": "EDID Editor",
       "category": "MediaApp:Video Tools:",
       "desc": "Builds and edits EDIDs, and checks them against event video processors. Runs entirely in the browser."
     },

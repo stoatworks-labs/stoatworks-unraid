@@ -192,7 +192,7 @@ replaces exactly that section. It names the host port from `unraid.json`, so
 the README, the compose file and the template cannot disagree about it.
 
 **Three repos' nginx configs had drifted from their `_headers`.**
-otter-edid-editor, simpleRTA and thumbnail-generator gained `/sw.js` and
+edid-editor, simpleRTA and thumbnail-generator gained `/sw.js` and
 `/manifest.webmanifest` no-cache rules in `_headers` after their last
 regeneration, so the container was serving a service worker with the wrong
 cache policy. Nothing reports this; only a regeneration shows it. Worth a
@@ -348,13 +348,13 @@ the broken path meant the copy silently fell back to the old committed version.
 **Assume any `hasOwnTemplate` app drifted during that window** — regenerating is
 the only thing that surfaces it.
 
-`otter-edid-editor` added as a `static-build` (`npm run build` → `dist`,
+`edid-editor` added as a `static-build` (`npm run build` → `dist`,
 `public/_headers`), **hostPort 8529**, public, category `MediaApp:Video Tools:`.
 19 templates now; the port collision sweep over `templates/*.xml` is clean.
 Image built green and is **anonymously pullable** — verified with the
 `ghcr.io/token` + manifest GET, not just a green Actions run. Fleet images are
 **linux/amd64 only** (checked blend-calc and test-card too), which is what
-Unraid wants. See [otter edid editor](https://github.com/stoatworks-labs/otter-edid-editor/blob/main/docs/NOTES.md) (`otter-edid-editor`).
+Unraid wants. See [edid editor](https://github.com/stoatworks-labs/edid-editor/blob/main/docs/NOTES.md) (`edid-editor`).
 
 ## 2026-08-20 (later) — the generator had been REVERTING Dependabot
 
@@ -398,3 +398,17 @@ are still uncommitted.
 `arraycad` is on **`master`**, not `main` — the odd one out in the fleet. The
 generated workflow triggers on `[main, master]` so it still builds, but it is
 worth normalising.
+
+## 2026-10-24 — Otter EDID Editor is now EDID Editor
+
+Allan renamed the tool before it had a release: repo, folder and image are all
+`edid-editor` now, so the template is `templates/edid-editor.xml` and the image
+`ghcr.io/stoatworks-labs/edid-editor`. The old package, `…/otter-edid-editor`, stays
+on GHCR and stops getting builds. An Unraid box running the old template keeps its
+last image until the new template is installed. The host port is still 8529.
+
+**`gen-templates.mjs` does delete**, unlike `gen-docker.mjs`: a template whose app has
+gone from `fleet.json` is removed, which is how the old XML went. It also removed
+`templates/weblinked.xml`, because weblinked's shared checkout was behind and had no
+`unraid/weblinked.xml` to copy (`hasOwnTemplate`). That one was put back by hand.
+Read `git status` after every run and restore anything that isn't yours.
